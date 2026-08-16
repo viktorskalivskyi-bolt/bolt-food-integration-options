@@ -197,6 +197,101 @@
 
     :root[data-theme="dark"] .send-button:hover { background: var(--btn-bg-hover); }
 
+    /* ── Mail hand-off panel ── */
+    .mail-panel {
+      position: fixed;
+      z-index: 110;
+      right: 20px;
+      bottom: 20px;
+      width: min(340px, calc(100vw - 32px));
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: 0 18px 44px rgba(19, 33, 27, .22);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: .2s ease;
+    }
+
+    .mail-panel.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .mail-panel-close {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      padding: 2px 6px;
+      color: var(--faint);
+      border: 0;
+      background: none;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .mail-panel-close:hover { color: var(--ink); }
+
+    .mail-panel-title {
+      margin: 0 0 6px;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .mail-panel-target {
+      margin: 0 0 14px;
+      overflow-wrap: anywhere;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .mail-panel-target b { color: var(--green-strong); }
+
+    .mail-panel-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .mail-client {
+      flex: 1 1 auto;
+      height: 38px;
+      padding: 0 14px;
+      color: var(--btn-fg);
+      border: 0;
+      border-radius: 10px;
+      background: var(--btn-bg);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .mail-client:hover { background: var(--btn-bg-hover); }
+
+    .mail-client[data-client="mailto"] {
+      flex-basis: 100%;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .mail-client[data-client="mailto"]:hover {
+      border-color: var(--green);
+      background: var(--mint-soft);
+    }
+
+    .mail-panel-hint {
+      margin: 12px 0 0;
+      color: var(--faint);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
     .theme-button {
       display: grid;
       flex: 0 0 auto;
@@ -1014,7 +1109,7 @@
       }
 
       html, body { width: 13.333in; margin: 0; background: #fff; }
-      .toolbar, .toast { display: none !important; }
+      .toolbar, .toast, .mail-panel { display: none !important; }
       .deck { display: block; padding: 0; }
       .slide {
         width: 13.333in;
@@ -1500,6 +1595,18 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite" style="position:fixed;z-index:100;right:20px;bottom:20px;max-width:380px;padding:14px 18px;color:#fff;border-radius:12px;background:var(--ink);opacity:0;pointer-events:none;transform:translateY(10px);transition:.2s ease;font-size:14px;font-weight:700;"></div>
 
+  <div class="mail-panel" id="mailPanel" role="dialog" aria-label="Надіслати PDF">
+    <button class="mail-panel-close" id="mailPanelClose" type="button" aria-label="Закрити">×</button>
+    <p class="mail-panel-title">PDF збережено. Куди відкрити лист?</p>
+    <p class="mail-panel-target">Отримувач: <b id="mailPanelTarget"></b></p>
+    <div class="mail-panel-actions">
+      <button class="mail-client" data-client="gmail" type="button">Gmail</button>
+      <button class="mail-client" data-client="outlook" type="button">Outlook</button>
+      <button class="mail-client" data-client="mailto" type="button">Поштовий клієнт</button>
+    </div>
+    <p class="mail-panel-hint">Лист відкриється з готовою темою й текстом — прикріпіть збережений PDF.</p>
+  </div>
+
   <script>
     const themeToggle = document.getElementById('themeToggle');
     const storedTheme = localStorage.getItem('deck-theme');
@@ -1528,9 +1635,13 @@
     const pdfButton = document.getElementById('downloadPdf');
     const sendButton = document.getElementById('sendPdf');
     const toast = document.getElementById('toast');
+    const mailPanel = document.getElementById('mailPanel');
+    const mailPanelTarget = document.getElementById('mailPanelTarget');
+    const mailPanelClose = document.getElementById('mailPanelClose');
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let toastTimer = null;
-    let pendingMailUrl = null;
+    let panelTimer = null;
+    let pendingEmail = null;
 
     const storedEmail = localStorage.getItem('deck-email');
     if (storedEmail) emailInput.value = storedEmail;
@@ -1562,28 +1673,62 @@
       setTimeout(() => { window.print(); }, 250);
     }
 
-    function buildMailUrl(email, partner) {
-      const subject = `Bolt Food × ${partner}: варіанти інтеграції`;
+    function mailParts(email) {
+      const partner = cleanPartnerName(input.value);
       const deckUrl = window.location.href.split('#')[0].split('?')[0];
+      const subject = `Bolt Food × ${partner}: варіанти інтеграції`;
       const body = [
-        `Доброго дня!`,
-        ``,
+        'Доброго дня!',
+        '',
         `Надсилаю презентацію з варіантами інтеграції ${partner} з Bolt Food.`,
-        ``,
-        `Будь ласка, відкрийте прикріплений PDF.`,
+        '',
+        'PDF у вкладенні.',
         `Онлайн-версія: ${deckUrl}`,
-        ``,
-        `Документація API: https://developer.bolt.eu/`,
+        '',
+        'Документація API: https://developer.bolt.eu/',
       ].join('\n');
 
-      return `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      return { email, subject, body };
     }
 
-    function openOutgoingMail(email) {
-      const partner = cleanPartnerName(input.value);
-      const mailUrl = buildMailUrl(email, partner);
-      const opened = window.open(mailUrl, '_blank');
-      if (!opened) window.location.href = mailUrl;
+    function composeUrl(client, email) {
+      const { subject, body } = mailParts(email);
+      const to = encodeURIComponent(email);
+      const su = encodeURIComponent(subject);
+      const bd = encodeURIComponent(body);
+
+      if (client === 'gmail') {
+        return `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${su}&body=${bd}`;
+      }
+      if (client === 'outlook') {
+        return `https://outlook.office.com/mail/deeplink/compose?to=${to}&subject=${su}&body=${bd}`;
+      }
+      return `mailto:${to}?subject=${su}&body=${bd}`;
+    }
+
+    function openCompose(client) {
+      const email = mailPanel.dataset.email;
+      if (!email) return;
+      const url = composeUrl(client, email);
+
+      if (client === 'mailto') {
+        window.location.href = url;
+      } else {
+        window.open(url, '_blank', 'noopener');
+      }
+
+      hideMailPanel();
+      showToast('Прикріпіть збережений PDF до листа й надішліть.', 5000);
+    }
+
+    function showMailPanel(email) {
+      mailPanel.dataset.email = email;
+      mailPanelTarget.textContent = email;
+      mailPanel.classList.add('is-visible');
+    }
+
+    function hideMailPanel() {
+      mailPanel.classList.remove('is-visible');
     }
 
     updatePartnerName();
@@ -1597,7 +1742,7 @@
     });
 
     pdfButton.addEventListener('click', () => {
-      pendingMailUrl = null;
+      pendingEmail = null;
       openPdfPrint();
     });
 
@@ -1612,18 +1757,33 @@
 
       emailInput.classList.remove('is-invalid');
       localStorage.setItem('deck-email', email);
-      pendingMailUrl = email;
-      showToast('Збережіть PDF, після цього відкриється лист — прикріпіть файл.', 6500);
+      pendingEmail = email;
+      updatePartnerName();
+      showToast('Спершу збережіть PDF, далі оберіть, де відкрити лист.', 5000);
       setTimeout(() => { window.print(); }, 250);
+
+      // afterprint is unreliable across browsers, so keep a fallback timer
+      clearTimeout(panelTimer);
+      panelTimer = setTimeout(() => {
+        if (pendingEmail) {
+          showMailPanel(pendingEmail);
+          pendingEmail = null;
+        }
+      }, 2500);
     });
 
     window.addEventListener('afterprint', () => {
-      if (!pendingMailUrl) return;
-      const email = pendingMailUrl;
-      pendingMailUrl = null;
-      openOutgoingMail(email);
-      showToast(`Лист відкрито на ${email}. Прикріпіть збережений PDF.`, 5000);
+      if (!pendingEmail) return;
+      clearTimeout(panelTimer);
+      showMailPanel(pendingEmail);
+      pendingEmail = null;
     });
+
+    mailPanel.querySelectorAll('[data-client]').forEach((button) => {
+      button.addEventListener('click', () => openCompose(button.dataset.client));
+    });
+
+    mailPanelClose.addEventListener('click', hideMailPanel);
   </script>
 </body>
 </html>
