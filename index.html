@@ -587,47 +587,35 @@
     /* ── Journey / overview ── */
     .journey {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 24px;
-      margin-top: 14px;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(4, auto);
+      grid-auto-flow: column;
+      gap: 20px 34px;
+      margin-top: 10px;
     }
 
     .journey-step {
-      position: relative;
-      padding: 24px 18px 22px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: var(--surface);
-    }
-
-    .journey-step:not(:last-child)::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      right: -17px;
-      width: 11px;
-      height: 11px;
-      border-top: 2.4px solid var(--green-strong);
-      border-right: 2.4px solid var(--green-strong);
-      transform: translateY(-50%) rotate(45deg);
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
     }
 
     .journey-num {
+      flex: 0 0 auto;
       display: grid;
-      width: 40px;
-      height: 40px;
-      margin-bottom: 16px;
+      width: 34px;
+      height: 34px;
       place-items: center;
       color: #fff;
       border-radius: 50%;
-      background: linear-gradient(140deg, var(--green-strong), var(--green-bright) 70%, var(--lime));
-      box-shadow: 0 6px 16px rgba(15, 157, 90, .26);
-      font-size: 17px;
+      background: linear-gradient(140deg, var(--green-strong), var(--green-bright) 72%, var(--lime));
+      box-shadow: 0 5px 13px rgba(15, 157, 90, .24);
+      font-size: 15px;
       font-weight: 800;
     }
 
-    .journey-step h3 { margin: 0 0 8px; font-size: 17px; }
-    .journey-step p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.45; }
+    .journey-step h3 { margin: 2px 0 3px; font-size: 16.5px; }
+    .journey-step p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.42; }
 
     /* ── Three rules ── */
     .rules {
@@ -949,19 +937,14 @@
         margin-top: 16px;
       }
 
+      .journey {
+        grid-template-rows: none;
+        grid-auto-flow: row;
+      }
+
       .card, .principle-card, .rule-card { padding: 20px; }
       .versus, .arrow { padding: 2px 0; font-size: 22px; }
       .rule-big { font-size: 28px; }
-
-      .journey-step { padding: 18px 20px; }
-      .journey-num { width: 34px; height: 34px; margin-bottom: 12px; }
-      .journey-step:not(:last-child)::after {
-        top: auto;
-        right: auto;
-        bottom: -13px;
-        left: 32px;
-        transform: rotate(135deg);
-      }
 
       .picker-board { grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 6px; }
       .device img { width: 100%; height: auto; }
@@ -1097,39 +1080,70 @@
     <section class="slide">
       <div class="slide-head">
         <p class="eyebrow"><span class="dot"></span>Як проходить інтеграція</p>
-        <h2>Пʼять кроків — від знайомства до запуску</h2>
-        <p class="subtitle">Загальна послідовність однакова для обох варіантів. Далі кожен етап розкрито детально.</p>
+        <h2>Покроковий план — від знайомства до запуску</h2>
+        <p class="subtitle">Послідовність однакова для обох варіантів. Обсяг робіт залежить від формату та маршруту. Техпідготовку ведемо паралельно з договором.</p>
       </div>
 
       <div class="journey">
         <div class="journey-step">
           <span class="journey-num">1</span>
-          <h3>Домовляємось</h3>
-          <p>Комерційні умови, опитувальник і технічний NDA. Обираємо 1-way або 2-way.</p>
+          <div>
+            <h3>Знайомство</h3>
+            <p>Kick-off: фіксуємо мету, ринок і орієнтовні терміни запуску.</p>
+          </div>
         </div>
         <div class="journey-step">
           <span class="journey-num">2</span>
-          <h3>Каталог</h3>
-          <p>Передаємо асортимент, ціни та залишки через API або SFTP.</p>
+          <div>
+            <h3>Формат інтеграції</h3>
+            <p>Обираємо 1-way (Bolt Picker) чи 2-way (замовлення приймає ваша система).</p>
+          </div>
         </div>
         <div class="journey-step">
           <span class="journey-num">3</span>
-          <h3>Потік замовлень</h3>
-          <p>Налаштовуємо обробку: Picker App на Sunmi (1-way) або ваша система (2-way).</p>
+          <div>
+            <h3>Маршрут підключення</h3>
+            <p>Напряму до Bolt API чи через Corezoid — він бере комунікацію з HQ на себе.</p>
+          </div>
         </div>
         <div class="journey-step">
           <span class="journey-num">4</span>
-          <h3>Пілот</h3>
-          <p>Перевіряємо повний цикл на одному магазині.</p>
+          <div>
+            <h3>Опитувальник + NDA</h3>
+            <p>Заповнюєте questionnaire: каталог (API/SFTP), webhooks, список магазинів.</p>
+          </div>
         </div>
         <div class="journey-step">
           <span class="journey-num">5</span>
-          <h3>Масштабування</h3>
-          <p>Підключаємо решту магазинів групами.</p>
+          <div>
+            <h3>Тестове середовище</h3>
+            <p>Команда Bolt створює тест і видає доступи (integrator_id, secret_key, provider_id).</p>
+          </div>
+        </div>
+        <div class="journey-step">
+          <span class="journey-num">6</span>
+          <div>
+            <h3>Тестові замовлення</h3>
+            <p>Проганяємо повний цикл на своєму асортименті: каталог, прийняття, збірка, заміни, статуси.</p>
+          </div>
+        </div>
+        <div class="journey-step">
+          <span class="journey-num">7</span>
+          <div>
+            <h3>Запуск (live)</h3>
+            <p>Створюємо реальні магазини, переносимо на прод і стартуємо перший.</p>
+          </div>
+        </div>
+        <div class="journey-step">
+          <span class="journey-num">8</span>
+          <div>
+            <h3>Масштабування</h3>
+            <p>Підключаємо решту магазинів групами до повної мережі.</p>
+          </div>
         </div>
       </div>
 
-      <div class="callout">Маршрут підключення — напряму до Bolt чи через Corezoid — узгоджуємо паралельно. Наступні слайди пояснюють кожен крок.</div>
+      <div class="callout warm"><b>Corezoid:</b> тестове середовище зазвичай пропускають — інтегратор виходить одразу в live.</div>
 
       <div class="footer">
         <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
