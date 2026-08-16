@@ -1,0 +1,1010 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Варіанти інтеграції з Bolt Food</title>
+  <style>
+    :root {
+      --bolt: #2f8b57;
+      --bolt-dark: #163d2a;
+      --mint: #dff7e9;
+      --mint-soft: #f2fbf6;
+      --ink: #17221c;
+      --muted: #637069;
+      --line: #d8e1dc;
+      --paper: #ffffff;
+      --warm: #f7f5ef;
+      --amber: #d9852b;
+      --blue: #3476a8;
+      --slide-w: 1280px;
+      --slide-h: 720px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: #e7ebe8;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(255,255,255,.45), rgba(255,255,255,.45)),
+        #e7ebe8;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input { font: inherit; }
+
+    .toolbar {
+      position: fixed;
+      z-index: 50;
+      top: 18px;
+      left: 50%;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      width: min(760px, calc(100vw - 28px));
+      padding: 10px;
+      transform: translateX(-50%);
+      border: 1px solid rgba(22, 61, 42, .14);
+      border-radius: 16px;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(14px);
+    }
+
+    .toolbar-label {
+      flex: 0 0 auto;
+      padding-left: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .partner-input {
+      min-width: 0;
+      flex: 1;
+      height: 42px;
+      padding: 0 14px;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      outline: none;
+      background: #fff;
+      font-weight: 700;
+    }
+
+    .partner-input:focus {
+      border-color: var(--bolt);
+      box-shadow: 0 0 0 3px rgba(47,139,87,.12);
+    }
+
+    .pdf-button {
+      height: 42px;
+      padding: 0 18px;
+      color: #fff;
+      border: 0;
+      border-radius: 10px;
+      background: var(--bolt-dark);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .pdf-button:hover { background: #0e2f1f; }
+
+    .deck {
+      display: grid;
+      gap: 28px;
+      justify-content: center;
+      padding: 92px 20px 50px;
+    }
+
+    .slide {
+      position: relative;
+      width: var(--slide-w);
+      height: var(--slide-h);
+      overflow: hidden;
+      padding: 54px 64px;
+      background: var(--paper);
+      box-shadow: 0 18px 60px rgba(23,34,28,.13);
+    }
+
+    .slide::after {
+      content: attr(data-page) " / 8";
+      position: absolute;
+      right: 64px;
+      bottom: 27px;
+      color: #87918c;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .05em;
+    }
+
+    .brand {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 20px;
+      font-weight: 850;
+      letter-spacing: -.03em;
+    }
+
+    .brand-mark {
+      position: relative;
+      width: 22px;
+      height: 22px;
+      transform: rotate(-12deg);
+      border-radius: 6px 6px 10px 10px;
+      background: var(--bolt);
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      left: 6px;
+      bottom: -4px;
+      width: 10px;
+      height: 10px;
+      transform: rotate(45deg);
+      border-radius: 2px;
+      background: var(--bolt);
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--bolt);
+      font-size: 14px;
+      font-weight: 850;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 980px;
+      margin-bottom: 26px;
+      font-size: 66px;
+      line-height: 1.02;
+      letter-spacing: -.055em;
+    }
+
+    h2 {
+      margin-bottom: 16px;
+      font-size: 42px;
+      line-height: 1.08;
+      letter-spacing: -.045em;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: 22px;
+      line-height: 1.18;
+      letter-spacing: -.025em;
+    }
+
+    .lead {
+      max-width: 880px;
+      color: var(--muted);
+      font-size: 24px;
+      line-height: 1.42;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .accent { color: var(--bolt); }
+    .strong { font-weight: 850; }
+
+    .title-slide {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #fff;
+      background: var(--bolt-dark);
+    }
+
+    .title-slide::before {
+      content: "";
+      position: absolute;
+      top: -190px;
+      right: -100px;
+      width: 520px;
+      height: 520px;
+      border: 90px solid rgba(223,247,233,.12);
+      border-radius: 50%;
+    }
+
+    .title-slide::after { color: rgba(255,255,255,.55); }
+    .title-slide .brand-mark,
+    .title-slide .brand-mark::after { background: #58d68d; }
+    .title-slide .lead { color: rgba(255,255,255,.72); }
+
+    .title-meta {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      color: rgba(255,255,255,.66);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .partner-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 13px;
+      color: #dff7e9;
+      border: 1px solid rgba(223,247,233,.22);
+      border-radius: 999px;
+      background: rgba(223,247,233,.08);
+    }
+
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 30px;
+    }
+
+    .slide-kicker {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .two-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .three-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .panel {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+    }
+
+    .panel.soft { background: var(--mint-soft); }
+    .panel.warm { background: var(--warm); }
+
+    .option-panel {
+      position: relative;
+      min-height: 430px;
+      padding-top: 76px;
+    }
+
+    .option-number {
+      position: absolute;
+      top: 24px;
+      left: 26px;
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      color: #fff;
+      border-radius: 50%;
+      background: var(--bolt);
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .option-panel.blue .option-number { background: var(--blue); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 27px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--mint);
+      color: var(--bolt-dark);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .pill.blue {
+      color: #1d527a;
+      background: #e2f1fb;
+    }
+
+    ul {
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      position: relative;
+      margin: 12px 0;
+      padding-left: 21px;
+      color: #34423a;
+      font-size: 17px;
+      line-height: 1.35;
+    }
+
+    li::before {
+      content: "";
+      position: absolute;
+      top: .55em;
+      left: 0;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--bolt);
+    }
+
+    .blue li::before { background: var(--blue); }
+
+    .principle {
+      display: grid;
+      grid-template-columns: 1fr 100px 1fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-top: 42px;
+    }
+
+    .principle-card {
+      min-height: 260px;
+      padding: 32px;
+      border-radius: 20px;
+      background: var(--mint-soft);
+    }
+
+    .principle-card:nth-child(3) { background: #eef6fb; }
+
+    .versus {
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 18px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .correction {
+      margin-top: 26px;
+      padding: 18px 22px;
+      border-left: 5px solid var(--amber);
+      background: #fff7ec;
+      color: #68431d;
+      font-size: 18px;
+      line-height: 1.42;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr 44px 1fr 44px 1fr;
+      align-items: center;
+      margin-top: 26px;
+    }
+
+    .flow-node {
+      display: flex;
+      min-height: 112px;
+      padding: 18px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .flow-node.primary {
+      color: var(--bolt-dark);
+      border-color: #addbc0;
+      background: var(--mint);
+    }
+
+    .flow-node.secondary {
+      color: #1d527a;
+      border-color: #b8d9ee;
+      background: #eaf5fc;
+    }
+
+    .arrow {
+      color: #89948e;
+      text-align: center;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .note-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .note {
+      padding: 17px 19px;
+      border-radius: 13px;
+      background: var(--warm);
+      color: #4d5752;
+      font-size: 15px;
+      line-height: 1.42;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 15px;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      line-height: 1.3;
+    }
+
+    th {
+      color: var(--muted);
+      background: #f7f9f8;
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    th:first-child, td:first-child { width: 25%; }
+    td:first-child { color: var(--ink); font-weight: 800; }
+    tbody tr:last-child td { border-bottom: 0; }
+
+    .decision {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 28px;
+    }
+
+    .decision-card {
+      min-height: 400px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .decision-card h3 { font-size: 25px; }
+    .decision-card p { color: var(--muted); font-size: 16px; line-height: 1.45; }
+
+    .decision-card.recommended {
+      border-color: #addbc0;
+      background: var(--mint-soft);
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 42px;
+    }
+
+    .timeline-step {
+      position: relative;
+      min-height: 235px;
+      padding: 62px 22px 22px;
+      border-top: 4px solid var(--bolt);
+      background: var(--mint-soft);
+    }
+
+    .timeline-index {
+      position: absolute;
+      top: 18px;
+      left: 22px;
+      color: var(--bolt);
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .timeline-step p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .timeline-note {
+      margin-top: 26px;
+      color: #5c4a32;
+      font-size: 16px;
+      font-weight: 750;
+    }
+
+    .next-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 34px;
+      margin-top: 34px;
+    }
+
+    .checklist {
+      counter-reset: next;
+      margin: 0;
+    }
+
+    .checklist li {
+      counter-increment: next;
+      min-height: 52px;
+      margin: 0 0 15px;
+      padding: 6px 0 6px 52px;
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 750;
+    }
+
+    .checklist li::before {
+      content: counter(next);
+      top: 0;
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      color: #fff;
+      border-radius: 50%;
+      background: var(--bolt);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .summary-box {
+      padding: 30px;
+      border-radius: 20px;
+      background: var(--bolt-dark);
+      color: #fff;
+    }
+
+    .summary-box p {
+      color: rgba(255,255,255,.72);
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .summary-box .partner-chip { margin-bottom: 22px; }
+
+    .source {
+      position: absolute;
+      left: 64px;
+      bottom: 25px;
+      color: #8a948f;
+      font-size: 11px;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 100;
+      right: 20px;
+      bottom: 20px;
+      max-width: 360px;
+      padding: 14px 18px;
+      color: #fff;
+      border-radius: 12px;
+      background: var(--bolt-dark);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: .2s ease;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1320px) {
+      .deck {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      .slide {
+        flex: 0 0 auto;
+        transform: scale(calc((100vw - 40px) / 1280));
+        transform-origin: top center;
+        margin-bottom: calc(-720px * (1 - ((100vw - 40px) / 1280)));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .toolbar-label { display: none; }
+      .pdf-button { padding: 0 12px; font-size: 13px; }
+      .deck { padding-top: 82px; }
+    }
+
+    @page {
+      size: 13.333in 7.5in;
+      margin: 0;
+    }
+
+    @media print {
+      html, body {
+        width: 13.333in;
+        margin: 0;
+        background: #fff;
+      }
+
+      .toolbar, .toast { display: none !important; }
+
+      .deck {
+        display: block;
+        padding: 0;
+      }
+
+      .slide {
+        width: 13.333in;
+        height: 7.5in;
+        margin: 0;
+        page-break-after: always;
+        break-after: page;
+        box-shadow: none;
+        transform: none !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .slide:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar" aria-label="Налаштування презентації">
+    <label class="toolbar-label" for="partnerName">Партнер</label>
+    <input
+      class="partner-input"
+      id="partnerName"
+      type="text"
+      value="Еко-Маркет"
+      maxlength="80"
+      autocomplete="organization"
+      aria-label="Назва партнера"
+    >
+    <button class="pdf-button" id="downloadPdf" type="button">Завантажити PDF</button>
+  </div>
+
+  <main class="deck">
+    <section class="slide title-slide" data-page="1">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span>Bolt Food</div>
+      <div>
+        <p class="eyebrow" style="color:#58d68d">Рішення для роздрібної мережі</p>
+        <h1>Варіанти інтеграції<br><span class="partner-value">Еко-Маркет</span> × Bolt Food</h1>
+        <p class="lead">Два операційні сценарії: робота в Bolt Picker або повне керування замовленням у системі партнера.</p>
+      </div>
+      <div class="title-meta">
+        <span class="partner-chip partner-value">Еко-Маркет</span>
+        <span>Партнерська презентація · 2026</span>
+      </div>
+    </section>
+
+    <section class="slide" data-page="2">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">Ключовий принцип</p>
+          <h2>Не змішуємо каталог<br>і потік замовлення</h2>
+        </div>
+        <div class="slide-kicker partner-value">Еко-Маркет</div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-card">
+          <span class="pill">Контур 1</span>
+          <h3 style="margin-top:20px">Каталог і наявність</h3>
+          <p class="lead" style="font-size:19px">Асортимент, категорії, ціни, промоціни та залишки передаються через погоджений канал: API або файловий обмін.</p>
+        </div>
+        <div class="versus">+</div>
+        <div class="principle-card">
+          <span class="pill blue">Контур 2</span>
+          <h3 style="margin-top:20px">Операції із замовленням</h3>
+          <p class="lead" style="font-size:19px">Саме тут обираємо 1-way або 2-way: хто приймає замовлення, збирає його та змінює статуси.</p>
+        </div>
+      </div>
+
+      <div class="correction"><strong>Важливо:</strong> 1-way і 2-way не визначають спосіб передачі каталогу. Це характеристика операційного потоку замовлення.</div>
+      <div class="source">Методологія: Bolt Food Integrations Overview та Stores Third-Party Integrations</div>
+    </section>
+
+    <section class="slide" data-page="3">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">Варіант 1</p>
+          <h2>1-way + Bolt Picker</h2>
+          <p class="lead" style="font-size:19px">Bolt-інструменти керують прийняттям, збором і готовністю замовлення.</p>
+        </div>
+        <span class="pill">Bolt operational flow</span>
+      </div>
+
+      <div class="flow">
+        <div class="flow-node">Каталог, ціни, залишки<br><span class="small">API / погоджений файловий обмін</span></div>
+        <div class="arrow">→</div>
+        <div class="flow-node primary">Bolt Food<br>+ Bolt Picker</div>
+        <div class="arrow">→</div>
+        <div class="flow-node">Прийняття, збір,<br>заміни, готовність</div>
+      </div>
+
+      <div class="note-row">
+        <div class="panel soft">
+          <h3>Що робить команда магазину</h3>
+          <ul>
+            <li>Працює із замовленням у Bolt Picker</li>
+            <li>Сканує товари та фіксує фактичну кількість</li>
+            <li>Опрацьовує відсутні позиції й дозволені заміни</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Що потрібно від партнера</h3>
+          <ul>
+            <li>Джерело асортименту, цін і залишків</li>
+            <li>Якісні SKU та штрихкоди для сканування</li>
+            <li>Сканувальні пристрої для працівників магазину</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="small" style="margin-top:18px"><strong>Опційно:</strong> Bolt може надсилати партнеру повідомлення про подію замовлення. У 1-way Bolt не очікує від системи партнера відповіді для керування замовленням.</p>
+      <div class="source">1-way: операції із замовленням виконуються в Merchant App або Picker App</div>
+    </section>
+
+    <section class="slide" data-page="4">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">Варіант 2</p>
+          <h2>2-way + система партнера</h2>
+          <p class="lead" style="font-size:19px">Партнер керує замовленням end-to-end у власному ПЗ.</p>
+        </div>
+        <span class="pill blue">Partner operational flow</span>
+      </div>
+
+      <div class="flow">
+        <div class="flow-node secondary">Bolt надсилає<br>нове замовлення</div>
+        <div class="arrow">→</div>
+        <div class="flow-node secondary">Система <span class="partner-value">Еко-Маркет</span><br><span class="small">прийняти / відхилити / готове</span></div>
+        <div class="arrow">→</div>
+        <div class="flow-node">Bolt отримує статуси<br>та координує доставку</div>
+      </div>
+
+      <div class="note-row">
+        <div class="panel">
+          <h3>Що реалізує партнер</h3>
+          <ul class="blue">
+            <li>Отримання нового замовлення та відповідь</li>
+            <li>Статуси: прийнято, відхилено, готове</li>
+            <li>Власний процес збору та контроль наявності</li>
+            <li>Відкриття, закриття й тимчасова пауза магазину</li>
+          </ul>
+        </div>
+        <div class="panel warm">
+          <h3>Ключове обмеження</h3>
+          <p class="lead" style="font-size:20px">2-way несумісний із Bolt Picker Flow. Якщо потрібні зміни кошика або заміни, їх підтримку погоджують і реалізують у 2-way контурі окремо.</p>
+          <p class="small">Bolt Merchant App у такому сценарії має обмежений режим і використовується переважно для підтримки.</p>
+        </div>
+      </div>
+
+      <div class="source">2-way: система партнера керує замовленням, статусами й доступністю провайдера</div>
+    </section>
+
+    <section class="slide" data-page="5">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">Порівняння</p>
+          <h2>Одна інтеграція — різна операційна модель</h2>
+        </div>
+        <div class="slide-kicker partner-value">Еко-Маркет</div>
+      </div>
+
+      <table aria-label="Порівняння 1-way та 2-way">
+        <thead>
+          <tr>
+            <th>Параметр</th>
+            <th>1-way + Bolt Picker</th>
+            <th>2-way + система партнера</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Керування замовленням</td>
+            <td>У Bolt Picker / Bolt App</td>
+            <td>У власному ПЗ партнера</td>
+          </tr>
+          <tr>
+            <td>Збір у магазині</td>
+            <td>Bolt Picker зі скануванням</td>
+            <td>Власний WMS / picker-рішення</td>
+          </tr>
+          <tr>
+            <td>Каталог і залишки</td>
+            <td>Окремий погоджений контур API або файлів</td>
+            <td>Окремий погоджений контур API або файлів</td>
+          </tr>
+          <tr>
+            <td>Статуси замовлення</td>
+            <td>Працівник змінює у Bolt-інструменті</td>
+            <td>Система партнера надсилає в Bolt</td>
+          </tr>
+          <tr>
+            <td>Заміни / корекції кошика</td>
+            <td>Підтримуються в Picker Flow</td>
+            <td>Потребують окремої технічної підтримки</td>
+          </tr>
+          <tr>
+            <td>Обладнання Bolt</td>
+            <td>Потрібні сканувальні пристрої</td>
+            <td>Не потрібне для операційного потоку</td>
+          </tr>
+          <tr>
+            <td>Зусилля IT партнера</td>
+            <td>Нижчі для order flow</td>
+            <td>Вищі: повний двосторонній order flow</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="source">Фінальний scope залежить від джерела каталогу, моделі залишків і необхідних функцій кошика</div>
+    </section>
+
+    <section class="slide" data-page="6">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">Як обрати</p>
+          <h2>Рішення залежить від готовності процесів, а не лише API</h2>
+        </div>
+      </div>
+
+      <div class="decision">
+        <div class="decision-card recommended">
+          <span class="pill">Обирайте 1-way + Picker, якщо</span>
+          <h3 style="margin-top:22px">Потрібен швидший операційний старт</h3>
+          <ul>
+            <li>Власного picker-рішення ще немає</li>
+            <li>Команда готова працювати у Bolt Picker</li>
+            <li>Важливі сканування, заміни й корекції під час збору</li>
+            <li>Партнер хоче зменшити обсяг розробки order flow</li>
+          </ul>
+        </div>
+        <div class="decision-card">
+          <span class="pill blue">Обирайте 2-way, якщо</span>
+          <h3 style="margin-top:22px">Потрібен єдиний власний процес</h3>
+          <ul class="blue">
+            <li>Є WMS / OMS і власне рішення для збору</li>
+            <li>Магазини не повинні працювати в окремому Bolt-додатку</li>
+            <li>IT-команда готова підтримувати webhooks, статуси й помилки</li>
+            <li>Потрібне централізоване керування доступністю магазинів</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="source">Рекомендація підтверджується після технічного discovery з IT-командою партнера</div>
+    </section>
+
+    <section class="slide" data-page="7">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">План запуску</p>
+          <h2>Від discovery до масштабування</h2>
+        </div>
+        <div class="slide-kicker partner-value">Еко-Маркет</div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-step">
+          <span class="timeline-index">01</span>
+          <h3>Технічний discovery</h3>
+          <p>Фіксуємо order flow, джерело каталогу, ціни, залишки, заміни та відповідальних.</p>
+        </div>
+        <div class="timeline-step">
+          <span class="timeline-index">02</span>
+          <h3>Тестове середовище</h3>
+          <p>Налаштовуємо інтеграційний контур, тестового провайдера та доступи.</p>
+        </div>
+        <div class="timeline-step">
+          <span class="timeline-index">03</span>
+          <h3>Пілотний магазин</h3>
+          <p>Перевіряємо каталог, наявність, повний order flow, скасування та edge cases.</p>
+        </div>
+        <div class="timeline-step">
+          <span class="timeline-index">04</span>
+          <h3>Запуск хвилями</h3>
+          <p>Погоджуємо критерії успіху, підтримку й послідовність підключення магазинів.</p>
+        </div>
+      </div>
+
+      <p class="timeline-note">Термін не фіксується до узгодження scope. Він залежить від обраного сценарію, готовності даних, розробки партнера та результатів пілота.</p>
+      <div class="source">Безпечний підхід: спочатку scope і test setup, потім оцінка та дати</div>
+    </section>
+
+    <section class="slide" data-page="8">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">Наступний крок</p>
+          <h2>Зафіксувати цільовий flow<br>і склад пілота</h2>
+        </div>
+      </div>
+
+      <div class="next-grid">
+        <div>
+          <ol class="checklist">
+            <li>Обрати операційну модель: Bolt Picker або власний order flow</li>
+            <li>Описати джерела каталогу, цін і залишків</li>
+            <li>Підтвердити підтримку замін та корекцій кошика</li>
+            <li>Визначити пілотний магазин і контакти IT / Operations</li>
+            <li>Провести технічний workshop і сформувати оцінку</li>
+          </ol>
+        </div>
+        <div class="summary-box">
+          <span class="partner-chip partner-value">Еко-Маркет</span>
+          <h3 style="font-size:31px">Результат workshop</h3>
+          <p>Єдина схема інтеграції, перелік відповідальностей, тест-кейси, залежності та реалістичний план запуску.</p>
+          <p style="margin-bottom:0"><strong style="color:#fff">Bolt Food</strong> супроводжує налаштування, тестування пілота та подальше масштабування.</p>
+        </div>
+      </div>
+
+      <div class="source">Підготовлено для <span class="partner-value">Еко-Маркет</span> · Bolt Food · 2026</div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">У діалозі друку оберіть «Save as PDF» / «Зберегти як PDF».</div>
+
+  <script>
+    const input = document.getElementById('partnerName');
+    const partnerValues = document.querySelectorAll('.partner-value');
+    const pdfButton = document.getElementById('downloadPdf');
+    const toast = document.getElementById('toast');
+
+    function cleanPartnerName(value) {
+      return value.replace(/\s+/g, ' ').trim() || 'Назва партнера';
+    }
+
+    function updatePartnerName() {
+      const name = cleanPartnerName(input.value);
+      partnerValues.forEach((element) => {
+        element.textContent = name;
+      });
+      document.title = `Bolt Food — варіанти інтеграції — ${name}`;
+      localStorage.setItem('bolt-food-partner-name', input.value);
+    }
+
+    const savedName = localStorage.getItem('bolt-food-partner-name');
+    if (savedName) input.value = savedName;
+    updatePartnerName();
+
+    input.addEventListener('input', updatePartnerName);
+    input.addEventListener('change', updatePartnerName);
+
+    pdfButton.addEventListener('click', () => {
+      updatePartnerName();
+      toast.classList.add('show');
+      setTimeout(() => {
+        window.print();
+        toast.classList.remove('show');
+      }, 250);
+    });
+  </script>
+</body>
+</html>
