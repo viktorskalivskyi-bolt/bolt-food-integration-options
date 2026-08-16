@@ -574,13 +574,13 @@
     .route-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 26px;
-      margin-top: 26px;
+      gap: 22px;
+      margin-top: 10px;
     }
 
     .route-card {
-      min-height: 330px;
-      padding: 28px 30px;
+      min-height: 0;
+      padding: 20px 22px 18px;
       border: 1px solid var(--line);
       border-radius: 18px;
       background: #fff;
@@ -590,7 +590,7 @@
       display: grid;
       grid-template-columns: 1fr 28px 1fr;
       align-items: center;
-      margin: 18px 0 20px;
+      margin: 12px 0 12px;
     }
 
     .route-diagram.corezoid {
@@ -624,6 +624,54 @@
       font-size: 17px;
       font-weight: 800;
     }
+
+    .route-card ul.bullets li { margin: 6px 0; font-size: 14px; }
+
+    .route-card h3 { font-size: 19px; margin-bottom: 4px; }
+
+    .api-link, a.api-link {
+      color: var(--green-strong);
+      font-weight: 800;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(15, 157, 90, .35);
+    }
+
+    .api-link:hover { border-bottom-color: var(--green-strong); }
+
+    .inline-icon {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      margin: 0 3px -2px 1px;
+      vertical-align: baseline;
+    }
+
+    .comm-note {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: var(--mint-soft);
+      color: #2f5f45;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .comm-note.blue {
+      background: #f2f8fc;
+      color: #1f5e8a;
+    }
+
+    .title-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      align-items: center;
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .title-meta .api-link { font-size: 16px; }
 
     @media (max-width: 1320px) {
       .deck { display: flex; flex-direction: column; align-items: center; }
@@ -660,6 +708,7 @@
         -webkit-print-color-adjust: exact;
       }
       .slide:last-child { page-break-after: auto; break-after: auto; }
+      a.api-link { color: var(--green-strong); text-decoration: none; }
     }
   </style>
 </head>
@@ -684,6 +733,9 @@
       <div class="brand title-brand"><span class="dot"></span>Bolt Food&nbsp;&nbsp;·&nbsp;&nbsp;<span class="partner-value">Назва партнера</span></div>
       <h1>Інтеграція <span class="partner-value">Назва партнера</span> з Bolt Food</h1>
       <p class="lead">Два операційні варіанти для ритейлу та магазинів. Різниця — хто керує замовленням і де його збирають.</p>
+      <div class="title-meta">
+        <span>Документація API:&nbsp;<a class="api-link" href="https://developer.bolt.eu/" target="_blank" rel="noopener">developer.bolt.eu</a></span>
+      </div>
       <div class="footer">
         <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
         <span class="page" data-page="1"></span>
@@ -712,7 +764,7 @@
         </div>
       </div>
 
-      <div class="callout warm"><b>Важливо:</b> 1-way і 2-way описують потік замовлення, а не спосіб передачі каталогу. Каталог передається в обох випадках однаково.</div>
+      <div class="callout warm"><b>Важливо:</b> 1-way і 2-way — це про замовлення, не про каталог. Каталог передається в обох випадках однаково.</div>
 
       <div class="footer">
         <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
@@ -725,7 +777,7 @@
       <div class="slide-head">
         <p class="eyebrow"><span class="dot"></span>Варіанти співпраці</p>
         <h2>Два операційні варіанти</h2>
-        <p class="subtitle">Каталог синхронізується в обох. Далі обираємо, як саме оброблятимуться замовлення.</p>
+        <p class="subtitle">Каталог синхронізується в обох. Далі обираємо, як оброблятимуться замовлення в магазині.</p>
       </div>
 
       <div class="cards-2">
@@ -736,8 +788,8 @@
           <ul class="bullets">
             <li>Прийняття, збір і готовність — у <b>Picker App</b> (Sunmi) та <b>Provider App</b>. Можна ввімкнути автоприйняття.</li>
             <li>Заміни й часткові замовлення працюють у процесі збору; різницю повертають покупцеві автоматично.</li>
-            <li>Опційно Bolt повідомляє партнера про замовлення, але відповіді від його системи не очікує.</li>
-            <li>Потрібні штрихкоди товарів і сканувальні пристрої Sunmi.</li>
+            <li>За бажанням Bolt може повідомляти партнера про замовлення, але відповіді від його системи не чекає.</li>
+            <li>Потрібні штрихкоди товарів і сканери Sunmi.</li>
           </ul>
         </div>
         <div class="card">
@@ -745,15 +797,15 @@
           <h3>2-way без пікерів</h3>
           <p class="cap">Прийняття, статуси й збірка — у системі партнера</p>
           <ul class="bullets blue">
-            <li><b>2-way інтеграція:</b> замовлення надходять у вашу систему, ви відповідаєте прийняти / відхилити / готове.</li>
+            <li><b>2-way інтеграція:</b> замовлення надходять у вашу систему; ви відповідаєте прийняти / відхилити / готове.</li>
             <li>Збір — у вашому процесі (власний WMS / picker), <b>без Bolt Picker</b>.</li>
             <li>Ви керуєте доступністю магазину: активний / неактивний, години, пауза.</li>
-            <li>Режим <b>несумісний із Picker Flow</b>; заміни кошика погоджуються й реалізуються окремо.</li>
+            <li>Не поєднується з Bolt Picker: заміни кошика узгоджуються й реалізуються окремо.</li>
           </ul>
         </div>
       </div>
 
-      <div class="callout">Обидва варіанти потребують інтеграції каталогу. Обираємо їх за операційним потоком замовлення, а не за способом передачі даних.</div>
+      <div class="callout">Каталог потрібен в обох варіантах. Обираємо 1-way або 2-way за тим, хто обробляє замовлення в магазині.</div>
 
       <div class="footer">
         <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
@@ -766,7 +818,7 @@
       <div class="slide-head">
         <p class="eyebrow"><span class="dot"></span>Архітектура підключення</p>
         <h2>Напряму до Bolt або через Corezoid</h2>
-        <p class="subtitle">Це окремий вибір від 1-way / 2-way. Технічний маршрут погоджується під час discovery.</p>
+        <p class="subtitle">Окремий вибір від 1-way / 2-way. Документація API:&nbsp;<a class="api-link" href="https://developer.bolt.eu/" target="_blank" rel="noopener">developer.bolt.eu</a></p>
       </div>
 
       <div class="route-grid">
@@ -779,15 +831,23 @@
             <div class="route-box middle">Bolt Food</div>
           </div>
           <ul class="bullets">
-            <li>Партнер реалізує погоджений Bolt API-контракт, webhooks та авторизацію.</li>
-            <li>Самостійно контролює повторні спроби, дублікати, ідемпотентність і моніторинг.</li>
-            <li>Підходить IT-команді, готовій підтримувати інтеграцію end-to-end.</li>
+            <li>Партнер підключається до Bolt API за документацією на <a class="api-link" href="https://developer.bolt.eu/" target="_blank" rel="noopener">developer.bolt.eu</a>.</li>
+            <li>IT-команда партнера сама підтримує інтеграцію: webhooks, авторизацію, повторні спроби.</li>
+            <li>Комунікація з глобальною командою Bolt — напряму англійською в
+              <svg class="inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="#E01E5A" d="M5.04 15.17a2.53 2.53 0 0 1-2.52 2.52A2.53 2.53 0 0 1 0 15.17a2.53 2.53 0 0 1 2.52-2.52h2.52v2.52zm1.27 0a2.53 2.53 0 0 1 2.52-2.52 2.53 2.53 0 0 1 2.52 2.52v6.31A2.53 2.53 0 0 1 8.83 24a2.53 2.53 0 0 1-2.52-2.52v-6.31z"/>
+                <path fill="#36C5F0" d="M8.83 5.04a2.53 2.53 0 0 1-2.52-2.52A2.53 2.53 0 0 1 8.83 0a2.53 2.53 0 0 1 2.52 2.52v2.52H8.83zm0 1.27a2.53 2.53 0 0 1 2.52 2.52 2.53 2.53 0 0 1-2.52 2.52H2.52A2.53 2.53 0 0 1 0 8.83a2.53 2.53 0 0 1 2.52-2.52h6.31z"/>
+                <path fill="#2EB67D" d="M18.96 8.83a2.53 2.53 0 0 1 2.52-2.52A2.53 2.53 0 0 1 24 8.83a2.53 2.53 0 0 1-2.52 2.52h-2.52V8.83zm-1.27 0a2.53 2.53 0 0 1-2.52 2.52 2.53 2.53 0 0 1-2.52-2.52V2.52A2.53 2.53 0 0 1 15.17 0a2.53 2.53 0 0 1 2.52 2.52v6.31z"/>
+                <path fill="#ECB22E" d="M15.17 18.96a2.53 2.53 0 0 1 2.52 2.52A2.53 2.53 0 0 1 15.17 24a2.53 2.53 0 0 1-2.52-2.52v-2.52h2.52zm0-1.27a2.53 2.53 0 0 1-2.52-2.52 2.53 2.53 0 0 1 2.52-2.52h6.31A2.53 2.53 0 0 1 24 15.17a2.53 2.53 0 0 1-2.52 2.52h-6.31z"/>
+              </svg><b>Slack</b>.
+            </li>
           </ul>
+          <div class="comm-note">Щоб потрапити в Slack з HQ, потрібна корпоративна пошта з комерційним доменом (не gmail.com, yahoo.com тощо).</div>
         </div>
 
         <div class="route-card">
           <span class="pill blue">Варіант B · Corezoid</span>
-          <h3>Інтеграційний шар між системами</h3>
+          <h3>Corezoid — наш інтегратор</h3>
           <div class="route-diagram corezoid">
             <div class="route-box partner-value">Назва партнера</div>
             <div class="route-arrow">↔</div>
@@ -796,14 +856,16 @@
             <div class="route-box">Bolt Food</div>
           </div>
           <ul class="bullets blue">
-            <li>Corezoid бере на себе Bolt-авторизацію, мапінг і маршрутизацію.</li>
-            <li>Можливий passthrough або узгоджений формат даних партнера.</li>
-            <li>Для каталогу: Corezoid забирає дані з API партнера або приймає їх через webhooks.</li>
+            <li>Corezoid — посередник між вашою системою і Bolt Food.</li>
+            <li>Бере на себе технічну комунікацію з HQ Bolt під час інтеграції.</li>
+            <li>Робить мапінг даних, авторизацію та маршрутизацію запитів.</li>
+            <li>Для каталогу: забирає дані з API партнера або приймає webhooks.</li>
           </ul>
+          <div class="comm-note blue">Локальна команда Bolt і Corezoid ведуть партнера; прямий Slack з HQ зазвичай не потрібен.</div>
         </div>
       </div>
 
-      <div class="callout">Обидва маршрути можуть підтримувати 2-way. Для 1-way каталог також може синхронізуватися напряму або через інтеграційний шар — залежно від погодженого scope.</div>
+      <div class="callout">Обидва маршрути підходять для 2-way. Каталог для 1-way також можна вести напряму або через Corezoid.</div>
 
       <div class="footer">
         <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
@@ -874,9 +936,9 @@
     <!-- 6 · Comparison -->
     <section class="slide">
       <div class="slide-head">
-        <p class="eyebrow"><span class="dot"></span>Нейтральне порівняння</p>
+        <p class="eyebrow"><span class="dot"></span>Порівняння</p>
         <h2>Чим відрізняються варіанти</h2>
-        <p class="subtitle">Ключові відмінності — у керуванні замовленням, збірці та обладнанні.</p>
+        <p class="subtitle">Основні відмінності — хто керує замовленням, як збирають і чи потрібні пристрої Bolt.</p>
       </div>
 
       <table aria-label="Порівняння 1-way та 2-way">
@@ -920,8 +982,8 @@
           </tr>
           <tr>
             <td>Орієнтовний термін</td>
-            <td>Залежить від scope та готовності даних</td>
-            <td>Більше, поетапно · залежить від розробки партнера</td>
+            <td>Залежить від готовності каталогу та магазинів</td>
+            <td>Довший · залежить від розробки на боці партнера</td>
           </tr>
         </tbody>
       </table>
@@ -937,26 +999,26 @@
       <div class="slide-head">
         <p class="eyebrow"><span class="dot"></span>Як відбувається запуск</p>
         <h2>Кроки для кожного варіанта</h2>
-        <p class="subtitle">Логіка схожа, обсяг різний. Підготовку можна вести паралельно з комерційними домовленостями.</p>
+        <p class="subtitle">Послідовність схожа, обсяг робіт різний. Техпідготовку можна вести паралельно з договором.</p>
       </div>
 
       <div class="cards-2">
         <div>
           <div class="steps-head"><span class="rail"></span>Пікери + 1-way</div>
           <div class="steps-col">
-            <div class="step"><span class="step-num">1</span><div><h3>Каталог у контурі даних</h3><p>Товари, ціни, залишки — API або SFTP.</p></div></div>
+            <div class="step"><span class="step-num">1</span><div><h3>Каталог</h3><p>Товари, ціни, залишки — через API або SFTP.</p></div></div>
             <div class="step"><span class="step-num">2</span><div><h3>1-way і пристрої</h3><p>Налаштування потоку + Sunmi / Provider App.</p></div></div>
             <div class="step"><span class="step-num">3</span><div><h3>Перевірка на пілоті</h3><p>Прийняття, збір зі скануванням, заміна, видача.</p></div></div>
-            <div class="step"><span class="step-num">4</span><div><h3>Масштабування</h3><p>Підключаємо решту магазинів хвилями.</p></div></div>
+            <div class="step"><span class="step-num">4</span><div><h3>Масштабування</h3><p>Підключаємо наступні магазини групами.</p></div></div>
           </div>
         </div>
         <div>
           <div class="steps-head"><span class="rail"></span>2-way · поетапно</div>
           <div class="steps-col">
-            <div class="step"><span class="step-num">1</span><div><h3>Технічний discovery</h3><p>Фіксуємо 2-way scope та маршрут: напряму або Corezoid.</p></div></div>
-            <div class="step"><span class="step-num">2</span><div><h3>Тестове середовище й каталог</h3><p>Формат, доступи; далі категорії → товари → залишки.</p></div></div>
+            <div class="step"><span class="step-num">1</span><div><h3>Технічний kick-off</h3><p>Фіксуємо 2-way scope і маршрут: напряму або Corezoid.</p></div></div>
+            <div class="step"><span class="step-num">2</span><div><h3>Тест і каталог</h3><p>Доступи, формат; далі категорії → товари → залишки.</p></div></div>
             <div class="step"><span class="step-num">3</span><div><h3>Перший магазин</h3><p>Прийняти / відхилити / готове з вашої системи.</p></div></div>
-            <div class="step"><span class="step-num">4</span><div><h3>Масштабування</h3><p>Хвилями до повного старту мережі.</p></div></div>
+            <div class="step"><span class="step-num">4</span><div><h3>Масштабування</h3><p>Групами магазинів до повної мережі.</p></div></div>
           </div>
         </div>
       </div>
@@ -970,9 +1032,9 @@
     <!-- 8 · Three rules -->
     <section class="slide">
       <div class="slide-head">
-        <p class="eyebrow"><span class="dot"></span>Три правила, які варто знати заздалегідь</p>
+        <p class="eyebrow"><span class="dot"></span>Правила, які варто знати заздалегідь</p>
         <h2>Що впливає на роботу магазину</h2>
-        <p class="subtitle">Ці умови закладені в правила Bolt Food — їх краще врахувати ще на етапі підготовки.</p>
+        <p class="subtitle">Це вимоги Bolt Food — їх краще закласти ще на етапі підготовки.</p>
       </div>
 
       <div class="rules">
@@ -992,8 +1054,8 @@
           <div class="rule-scope">Для 2-way інтеграції</div>
           <ul class="bullets">
             <li>Подію потрібно швидко підтверджувати відповіддю <b>200 OK</b>.</li>
-            <li>Той самий <b>order_id</b> може прийти повторно — потрібна ідемпотентність.</li>
-            <li>Статуси йдуть строго по черзі: прийняти → готове → забране / доставлене, якщо застосовно.</li>
+            <li>Той самий <b>order_id</b> може прийти повторно — обробка має це витримувати.</li>
+            <li>Статуси йдуть строго по черзі: прийняти → готове → забране / доставлене.</li>
           </ul>
         </div>
         <div class="rule-card r3">
@@ -1019,7 +1081,7 @@
       <div class="slide-head">
         <p class="eyebrow"><span class="dot"></span>Наступні кроки</p>
         <h2>Що потрібно для старту</h2>
-        <p class="subtitle">Пропонуємо визначитися з форматом і почати підготовку паралельно.</p>
+        <p class="subtitle">Обираємо формат і паралельно збираємо дані для пілоту.</p>
       </div>
 
       <div class="cards-2">
@@ -1028,7 +1090,7 @@
           <h3>Рішення та дані</h3>
           <ul class="bullets">
             <li>Операційний варіант: пікери + 1-way або 2-way без пікерів.</li>
-            <li>Маршрут реалізації: напряму або через Corezoid.</li>
+            <li>Маршрут: напряму (Slack з HQ, корпоративна пошта) або через Corezoid.</li>
             <li>Пілотний магазин і місто.</li>
             <li>Джерело каталогу, цін і залишків; наявність штрихкодів.</li>
             <li>Формат обміну, доступи (API / webhooks / SFTP) і контакти IT.</li>
@@ -1041,12 +1103,13 @@
             <li>Налаштування каталогу, маршруту інтеграції та 1-way / 2-way.</li>
             <li>Для пікерів — облікові записи, Sunmi, Provider App.</li>
             <li>Спільна перевірка замовлення на пілоті.</li>
-            <li>Супровід під час масштабування та в перші дні після старту.</li>
+            <li>Підтримка під час підключення наступних магазинів.</li>
+            <li>Посилання на API:&nbsp;<a class="api-link" href="https://developer.bolt.eu/" target="_blank" rel="noopener">developer.bolt.eu</a></li>
           </ul>
         </div>
       </div>
 
-      <div class="callout">Наступний крок — коротка зустріч, щоб обрати варіант і зафіксувати пілотний магазин та орієнтовні дати.</div>
+      <div class="callout">Наступний крок — коротка зустріч: обрати варіант, пілотний магазин і орієнтовні дати.</div>
 
       <div class="footer">
         <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
