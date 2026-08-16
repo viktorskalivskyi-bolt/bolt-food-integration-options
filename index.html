@@ -20,6 +20,8 @@
       --line: #e6ebe7;
       --red: #e94b3b;
       --blue: #2f7db0;
+      --blue-deep: #1250c8;
+      --blue-vivid: #2a8bee;
       --paper: #ffffff;
       --slide-w: 1280px;
       --slide-h: 720px;
@@ -257,7 +259,10 @@
       text-transform: uppercase;
     }
 
-    .pill.blue { background: #e7f1f9; color: #1f5e8a; }
+    .pill.blue {
+      color: #fff;
+      background: linear-gradient(90deg, var(--blue-deep), var(--blue-vivid));
+    }
 
     ul.bullets {
       margin: 16px 0 0;
@@ -285,7 +290,9 @@
       background: var(--green-bright);
     }
 
-    ul.bullets.blue li::before { background: var(--blue); }
+    ul.bullets.blue li::before {
+      background: linear-gradient(140deg, var(--blue-deep), var(--blue-vivid));
+    }
 
     b, strong { font-weight: 800; color: var(--ink); }
 
@@ -579,55 +586,119 @@
     }
 
     .route-card {
+      position: relative;
+      overflow: hidden;
       min-height: 0;
-      padding: 20px 22px 18px;
+      padding: 22px 24px 18px;
       border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #fff;
+      border-radius: 20px;
+      background: linear-gradient(170deg, #fbfdfb 0%, #fff 46%);
+      box-shadow: 0 10px 28px rgba(19, 33, 27, .06);
+    }
+
+    .route-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--green-strong), var(--lime));
+    }
+
+    .route-card.b {
+      background: linear-gradient(170deg, #f7fbff 0%, #fff 46%);
+    }
+
+    .route-card.b::before {
+      background: linear-gradient(90deg, var(--blue-deep), var(--blue-vivid));
     }
 
     .route-diagram {
       display: grid;
-      grid-template-columns: 1fr 28px 1fr;
-      align-items: center;
-      margin: 12px 0 12px;
+      grid-template-columns: 1fr 92px 1fr;
+      align-items: stretch;
+      margin: 16px 0 10px;
     }
 
     .route-diagram.corezoid {
-      grid-template-columns: 1fr 24px 1fr 24px 1fr;
+      grid-template-columns: 1fr 62px 1fr 62px 1fr;
     }
 
-    .route-box {
+    .route-node {
       display: grid;
-      min-height: 58px;
-      padding: 9px;
-      place-items: center;
+      gap: 2px;
+      min-height: 62px;
+      padding: 10px 8px;
+      place-content: center;
       text-align: center;
       border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--mint-soft);
+      border-radius: 14px;
+      background: #fff;
       color: var(--ink);
       font-size: 13px;
       font-weight: 800;
-      line-height: 1.25;
+      line-height: 1.2;
+      box-shadow: 0 3px 10px rgba(19, 33, 27, .05);
     }
 
-    .route-box.middle {
+    .route-node span {
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .route-node.bolt {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(140deg, var(--green-strong), var(--green-bright) 62%, var(--lime));
+      box-shadow: 0 6px 16px rgba(15, 157, 90, .28);
+    }
+
+    .route-node.bolt span { color: rgba(255, 255, 255, .82); }
+
+    .route-node.bolt-soft {
       color: var(--green-strong);
       border-color: var(--mint-line);
-      background: var(--mint);
+      background: linear-gradient(140deg, var(--mint), #f6fcf8);
     }
 
-    .route-arrow {
-      color: var(--faint);
-      text-align: center;
-      font-size: 17px;
-      font-weight: 800;
+    .route-node.bolt-soft span { color: #6f9c85; }
+
+    .route-node.corezoid {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(140deg, var(--blue-deep), var(--blue-vivid));
+      box-shadow: 0 6px 16px rgba(18, 89, 195, .3);
     }
+
+    .route-node.corezoid span { color: rgba(255, 255, 255, .82); }
+
+    .connector {
+      display: grid;
+      place-content: center;
+      padding: 0 4px;
+    }
+
+    .connector svg { display: block; width: 100%; height: auto; }
+
+    .route-cap {
+      margin: 0 0 2px;
+      color: var(--faint);
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .route-card.b .route-cap { color: #6b8fc4; }
 
     .route-card ul.bullets li { margin: 6px 0; font-size: 14px; }
 
     .route-card h3 { font-size: 19px; margin-bottom: 4px; }
+
+    .route-card.b h3 { color: var(--blue-deep); }
 
     .api-link, a.api-link {
       color: var(--green-strong);
@@ -657,8 +728,8 @@
     }
 
     .comm-note.blue {
-      background: #f2f8fc;
-      color: #1f5e8a;
+      background: linear-gradient(120deg, #eaf2fe, #f6faff);
+      color: var(--blue-deep);
     }
 
     .title-meta {
@@ -824,15 +895,28 @@
       <div class="route-grid">
         <div class="route-card">
           <span class="pill">Варіант A · Напряму</span>
-          <h3>Partner system ↔ Bolt Food API</h3>
+          <h3>Пряме підключення до Bolt Food API</h3>
           <div class="route-diagram">
-            <div class="route-box partner-value">Назва партнера</div>
-            <div class="route-arrow">↔</div>
-            <div class="route-box middle">Bolt Food</div>
+            <div class="route-node"><b class="partner-value">Назва партнера</b><span>Ваша система</span></div>
+            <div class="connector">
+              <svg viewBox="0 0 92 26" aria-hidden="true" focusable="false">
+                <defs>
+                  <linearGradient id="linkA" gradientUnits="userSpaceOnUse" x1="2" y1="13" x2="90" y2="13">
+                    <stop offset="0" stop-color="#7fcfab"/>
+                    <stop offset="1" stop-color="#0f9d5a"/>
+                  </linearGradient>
+                </defs>
+                <line x1="13" y1="13" x2="79" y2="13" stroke="url(#linkA)" stroke-width="3.4" stroke-linecap="round"/>
+                <path d="M2 13 L14 6 V20 Z" fill="#7fcfab"/>
+                <path d="M90 13 L78 6 V20 Z" fill="#0f9d5a"/>
+              </svg>
+            </div>
+            <div class="route-node bolt">Bolt Food<span>Global API</span></div>
           </div>
+          <p class="route-cap">REST API · webhooks · авторизація на боці партнера</p>
           <ul class="bullets">
             <li>Партнер підключається до Bolt API за документацією на <a class="api-link" href="https://developer.bolt.eu/" target="_blank" rel="noopener">developer.bolt.eu</a>.</li>
-            <li>IT-команда партнера сама підтримує інтеграцію: webhooks, авторизацію, повторні спроби.</li>
+            <li>Партнер сам підтримує webhooks, авторизацію та повторні спроби.</li>
             <li>Комунікація з глобальною командою Bolt — <b>англійською</b> напряму в
               <svg class="inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path fill="#E01E5A" d="M5.04 15.17a2.53 2.53 0 0 1-2.52 2.52A2.53 2.53 0 0 1 0 15.17a2.53 2.53 0 0 1 2.52-2.52h2.52v2.52zm1.27 0a2.53 2.53 0 0 1 2.52-2.52 2.53 2.53 0 0 1 2.52 2.52v6.31A2.53 2.53 0 0 1 8.83 24a2.53 2.53 0 0 1-2.52-2.52v-6.31z"/>
@@ -842,26 +926,51 @@
               </svg><b>Slack</b>.
             </li>
           </ul>
-          <div class="comm-note">Якщо партнер іде напряму (як варіант для <span class="partner-value">Назва партнера</span>) — спілкування з глобалами англійською. Для Slack потрібна корпоративна пошта (не gmail.com, yahoo.com тощо).</div>
+          <div class="comm-note">Для Slack потрібна пошта з комерційним доменом (не gmail.com, yahoo.com).</div>
         </div>
 
-        <div class="route-card">
+        <div class="route-card b">
           <span class="pill blue">Варіант B · Corezoid</span>
           <h3>Corezoid — наш інтегратор</h3>
           <div class="route-diagram corezoid">
-            <div class="route-box partner-value">Назва партнера</div>
-            <div class="route-arrow">↔</div>
-            <div class="route-box middle">Corezoid</div>
-            <div class="route-arrow">↔</div>
-            <div class="route-box">Bolt Food</div>
+            <div class="route-node"><b class="partner-value">Назва партнера</b><span>Ваша система</span></div>
+            <div class="connector">
+              <svg viewBox="0 0 62 26" aria-hidden="true" focusable="false">
+                <defs>
+                  <linearGradient id="linkB1" gradientUnits="userSpaceOnUse" x1="2" y1="13" x2="60" y2="13">
+                    <stop offset="0" stop-color="#8fbef4"/>
+                    <stop offset="1" stop-color="#1250c8"/>
+                  </linearGradient>
+                </defs>
+                <line x1="12" y1="13" x2="50" y2="13" stroke="url(#linkB1)" stroke-width="3.4" stroke-linecap="round"/>
+                <path d="M2 13 L13 6.6 V19.4 Z" fill="#8fbef4"/>
+                <path d="M60 13 L49 6.6 V19.4 Z" fill="#1250c8"/>
+              </svg>
+            </div>
+            <div class="route-node corezoid">Corezoid<span>Посередник</span></div>
+            <div class="connector">
+              <svg viewBox="0 0 62 26" aria-hidden="true" focusable="false">
+                <defs>
+                  <linearGradient id="linkB2" gradientUnits="userSpaceOnUse" x1="2" y1="13" x2="60" y2="13">
+                    <stop offset="0" stop-color="#2a8bee"/>
+                    <stop offset="1" stop-color="#0f9d5a"/>
+                  </linearGradient>
+                </defs>
+                <line x1="12" y1="13" x2="50" y2="13" stroke="url(#linkB2)" stroke-width="3.4" stroke-linecap="round"/>
+                <path d="M2 13 L13 6.6 V19.4 Z" fill="#2a8bee"/>
+                <path d="M60 13 L49 6.6 V19.4 Z" fill="#0f9d5a"/>
+              </svg>
+            </div>
+            <div class="route-node bolt-soft">Bolt Food<span>Global API</span></div>
           </div>
+          <p class="route-cap">Corezoid тримає мапінг даних і звʼязок з HQ Bolt</p>
           <ul class="bullets blue">
             <li>Corezoid — посередник між вашою системою і Bolt Food.</li>
             <li>Бере на себе технічну комунікацію з HQ Bolt під час інтеграції.</li>
             <li>Робить мапінг даних, авторизацію та маршрутизацію запитів.</li>
             <li>Для каталогу: забирає дані з API партнера або приймає webhooks.</li>
           </ul>
-          <div class="comm-note blue">Локальна команда Bolt і Corezoid ведуть партнера; прямий Slack з HQ зазвичай не потрібен.</div>
+          <div class="comm-note blue">Локальна команда Bolt і Corezoid ведуть партнера; прямий Slack з HQ не потрібен.</div>
         </div>
       </div>
 
