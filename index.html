@@ -145,7 +145,7 @@
       font-size: 13px;
     }
 
-    .footer .page::after { content: attr(data-page) " / 8"; }
+    .footer .page::after { content: attr(data-page) " / 9"; }
 
     /* ── Brand / typography ── */
     .brand {
@@ -257,7 +257,6 @@
       text-transform: uppercase;
     }
 
-    .pill.blue { background: #e7f1ف9; }
     .pill.blue { background: #e7f1f9; color: #1f5e8a; }
 
     ul.bullets {
@@ -635,6 +634,61 @@
 
     .device-cap { color: var(--faint); font-size: 13px; font-weight: 700; }
 
+    /* ── Integration routes ── */
+    .route-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px;
+      margin-top: 26px;
+    }
+
+    .route-card {
+      min-height: 330px;
+      padding: 28px 30px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+    }
+
+    .route-diagram {
+      display: grid;
+      grid-template-columns: 1fr 28px 1fr;
+      align-items: center;
+      margin: 18px 0 20px;
+    }
+
+    .route-diagram.corezoid {
+      grid-template-columns: 1fr 24px 1fr 24px 1fr;
+    }
+
+    .route-box {
+      display: grid;
+      min-height: 58px;
+      padding: 9px;
+      place-items: center;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--mint-soft);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .route-box.middle {
+      color: var(--green-strong);
+      border-color: var(--mint-line);
+      background: var(--mint);
+    }
+
+    .route-arrow {
+      color: var(--faint);
+      text-align: center;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
     @media (max-width: 1320px) {
       .deck { display: flex; flex-direction: column; align-items: center; }
       .slide {
@@ -680,7 +734,7 @@
       class="partner-input"
       id="partnerName"
       type="text"
-      value="Еко-Маркет"
+      value="Назва партнера"
       maxlength="80"
       autocomplete="organization"
       aria-label="Назва партнера"
@@ -691,11 +745,11 @@
   <main class="deck">
     <!-- 1 · Title -->
     <section class="slide title-slide">
-      <div class="brand title-brand"><span class="dot"></span>Bolt Food&nbsp;&nbsp;·&nbsp;&nbsp;<span class="partner-value">Еко-Маркет</span></div>
-      <h1>Підключення <span class="partner-value">Еко-Маркету</span> до Bolt Food</h1>
-      <p class="lead">Два робочі варіанти для роздрібної мережі. Обидва потребують інтеграції. Різниця — хто керує замовленням і де його збирають.</p>
+      <div class="brand title-brand"><span class="dot"></span>Bolt Food&nbsp;&nbsp;·&nbsp;&nbsp;<span class="partner-value">Назва партнера</span></div>
+      <h1>Інтеграція <span class="partner-value">Назва партнера</span> з Bolt Food</h1>
+      <p class="lead">Два операційні варіанти для ритейлу та магазинів. Різниця — хто керує замовленням і де його збирають.</p>
       <div class="footer">
-        <span>Bolt Food · <span class="partner-value">Еко-Маркет</span></span>
+        <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
         <span class="page" data-page="1"></span>
       </div>
     </section>
@@ -725,7 +779,7 @@
       <div class="callout warm"><b>Важливо:</b> 1-way і 2-way описують потік замовлення, а не спосіб передачі каталогу. Каталог передається в обох випадках однаково.</div>
 
       <div class="footer">
-        <span>Bolt Food · <span class="partner-value">Еко-Маркет</span></span>
+        <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
         <span class="page" data-page="2"></span>
       </div>
     </section>
@@ -734,7 +788,7 @@
     <section class="slide">
       <div class="slide-head">
         <p class="eyebrow"><span class="dot"></span>Варіанти співпраці</p>
-        <h2>Два варіанти інтеграції</h2>
+        <h2>Два операційні варіанти</h2>
         <p class="subtitle">Каталог синхронізується в обох. Далі обираємо, як саме оброблятимуться замовлення.</p>
       </div>
 
@@ -766,12 +820,62 @@
       <div class="callout">Обидва варіанти потребують інтеграції каталогу. Обираємо їх за операційним потоком замовлення, а не за способом передачі даних.</div>
 
       <div class="footer">
-        <span>Bolt Food · <span class="partner-value">Еко-Маркет</span></span>
+        <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
         <span class="page" data-page="3"></span>
       </div>
     </section>
 
-    <!-- 4 · How Bolt Picker works -->
+    <!-- 4 · Integration route -->
+    <section class="slide">
+      <div class="slide-head">
+        <p class="eyebrow"><span class="dot"></span>Архітектура підключення</p>
+        <h2>Напряму до Bolt або через Corezoid</h2>
+        <p class="subtitle">Це окремий вибір від 1-way / 2-way. Технічний маршрут погоджується під час discovery.</p>
+      </div>
+
+      <div class="route-grid">
+        <div class="route-card">
+          <span class="pill">Варіант A · Напряму</span>
+          <h3>Partner system ↔ Bolt Food API</h3>
+          <div class="route-diagram">
+            <div class="route-box partner-value">Назва партнера</div>
+            <div class="route-arrow">↔</div>
+            <div class="route-box middle">Bolt Food</div>
+          </div>
+          <ul class="bullets">
+            <li>Партнер реалізує погоджений Bolt API-контракт, webhooks та авторизацію.</li>
+            <li>Самостійно контролює повторні спроби, дублікати, ідемпотентність і моніторинг.</li>
+            <li>Підходить IT-команді, готовій підтримувати інтеграцію end-to-end.</li>
+          </ul>
+        </div>
+
+        <div class="route-card">
+          <span class="pill blue">Варіант B · Corezoid</span>
+          <h3>Інтеграційний шар між системами</h3>
+          <div class="route-diagram corezoid">
+            <div class="route-box partner-value">Назва партнера</div>
+            <div class="route-arrow">↔</div>
+            <div class="route-box middle">Corezoid</div>
+            <div class="route-arrow">↔</div>
+            <div class="route-box">Bolt Food</div>
+          </div>
+          <ul class="bullets blue">
+            <li>Corezoid бере на себе Bolt-авторизацію, мапінг і маршрутизацію.</li>
+            <li>Можливий passthrough або узгоджений формат даних партнера.</li>
+            <li>Для каталогу: Corezoid забирає дані з API партнера або приймає їх через webhooks.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout">Обидва маршрути можуть підтримувати 2-way. Для 1-way каталог також може синхронізуватися напряму або через інтеграційний шар — залежно від погодженого scope.</div>
+
+      <div class="footer">
+        <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
+        <span class="page" data-page="4"></span>
+      </div>
+    </section>
+
+    <!-- 5 · How Bolt Picker works -->
     <section class="slide">
       <div class="slide-head">
         <p class="eyebrow"><span class="dot"></span>Як працює Bolt Picker</p>
@@ -813,12 +917,12 @@
       </div>
 
       <div class="footer">
-        <span>Bolt Food · <span class="partner-value">Еко-Маркет</span></span>
-        <span class="page" data-page="4"></span>
+        <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
+        <span class="page" data-page="5"></span>
       </div>
     </section>
 
-    <!-- 5 · Comparison -->
+    <!-- 6 · Comparison -->
     <section class="slide">
       <div class="slide-head">
         <p class="eyebrow"><span class="dot"></span>Нейтральне порівняння</p>
@@ -846,6 +950,11 @@
             <td>Погоджений канал (API або SFTP)</td>
           </tr>
           <tr>
+            <td>Маршрут реалізації</td>
+            <td>Напряму або через Corezoid</td>
+            <td>Напряму або через Corezoid</td>
+          </tr>
+          <tr>
             <td>Збірка</td>
             <td>Bolt Picker на Sunmi L2s</td>
             <td>Власна система · без Bolt Picker</td>
@@ -869,12 +978,12 @@
       </table>
 
       <div class="footer">
-        <span>Bolt Food · <span class="partner-value">Еко-Маркет</span></span>
-        <span class="page" data-page="5"></span>
+        <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
+        <span class="page" data-page="6"></span>
       </div>
     </section>
 
-    <!-- 6 · Launch steps -->
+    <!-- 7 · Launch steps -->
     <section class="slide">
       <div class="slide-head">
         <p class="eyebrow"><span class="dot"></span>Як відбувається запуск</p>
@@ -895,8 +1004,8 @@
         <div>
           <div class="steps-head"><span class="rail"></span>2-way · поетапно</div>
           <div class="steps-col">
-            <div class="step"><span class="step-num">1</span><div><h3>Технічний discovery</h3><p>Фіксуємо order flow, дані та відповідальних.</p></div></div>
-            <div class="step"><span class="step-num">2</span><div><h3>Тестове середовище й каталог</h3><p>Доступи; далі категорії → товари → залишки.</p></div></div>
+            <div class="step"><span class="step-num">1</span><div><h3>Технічний discovery</h3><p>Фіксуємо 2-way scope та маршрут: напряму або Corezoid.</p></div></div>
+            <div class="step"><span class="step-num">2</span><div><h3>Тестове середовище й каталог</h3><p>Формат, доступи; далі категорії → товари → залишки.</p></div></div>
             <div class="step"><span class="step-num">3</span><div><h3>Перший магазин</h3><p>Прийняти / відхилити / готове з вашої системи.</p></div></div>
             <div class="step"><span class="step-num">4</span><div><h3>Масштабування</h3><p>Хвилями до повного старту мережі.</p></div></div>
           </div>
@@ -904,12 +1013,12 @@
       </div>
 
       <div class="footer">
-        <span>Bolt Food · <span class="partner-value">Еко-Маркет</span></span>
-        <span class="page" data-page="6"></span>
+        <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
+        <span class="page" data-page="7"></span>
       </div>
     </section>
 
-    <!-- 7 · Three rules -->
+    <!-- 8 · Three rules -->
     <section class="slide">
       <div class="slide-head">
         <p class="eyebrow"><span class="dot"></span>Три правила, які варто знати заздалегідь</p>
@@ -929,13 +1038,13 @@
           </ul>
         </div>
         <div class="rule-card r2">
-          <div class="rule-big">Каталог</div>
-          <div class="rule-sub">Порядок оновлення</div>
-          <div class="rule-scope">Стосується обох варіантів</div>
+          <div class="rule-big">Webhooks</div>
+          <div class="rule-sub">Надійність обміну</div>
+          <div class="rule-scope">Для 2-way інтеграції</div>
           <ul class="bullets">
-            <li>Спершу категорії, потім товари, і лише потім залишки.</li>
-            <li>Для пікерів потрібні штрихкоди — без них скан у залі не працює.</li>
-            <li>Публікацію меню в застосунку виконує платформа Bolt.</li>
+            <li>Подію потрібно швидко підтверджувати відповіддю <b>200 OK</b>.</li>
+            <li>Той самий <b>order_id</b> може прийти повторно — потрібна ідемпотентність.</li>
+            <li>Статуси йдуть строго по черзі: прийняти → готове → забране / доставлене, якщо застосовно.</li>
           </ul>
         </div>
         <div class="rule-card r3">
@@ -951,12 +1060,12 @@
       </div>
 
       <div class="footer">
-        <span>Bolt Food · <span class="partner-value">Еко-Маркет</span></span>
-        <span class="page" data-page="7"></span>
+        <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
+        <span class="page" data-page="8"></span>
       </div>
     </section>
 
-    <!-- 8 · Next steps -->
+    <!-- 9 · Next steps -->
     <section class="slide">
       <div class="slide-head">
         <p class="eyebrow"><span class="dot"></span>Наступні кроки</p>
@@ -966,20 +1075,21 @@
 
       <div class="cards-2">
         <div class="card">
-          <span class="pill">Від&nbsp;<span class="partner-value">Еко-Маркету</span></span>
+          <span class="pill">Від&nbsp;<span class="partner-value">Назва партнера</span></span>
           <h3>Рішення та дані</h3>
           <ul class="bullets">
-            <li>Обраний варіант: пікери + 1-way або 2-way без пікерів.</li>
+            <li>Операційний варіант: пікери + 1-way або 2-way без пікерів.</li>
+            <li>Маршрут реалізації: напряму або через Corezoid.</li>
             <li>Пілотний магазин і місто.</li>
             <li>Джерело каталогу, цін і залишків; наявність штрихкодів.</li>
-            <li>Доступи для обміну (API або SFTP) і контакти IT.</li>
+            <li>Формат обміну, доступи (API / webhooks / SFTP) і контакти IT.</li>
           </ul>
         </div>
         <div class="card">
           <span class="pill">Від Bolt Food</span>
           <h3>Підготовка й супровід</h3>
           <ul class="bullets">
-            <li>Налаштування контуру каталогу та обраного 1-way / 2-way.</li>
+            <li>Налаштування каталогу, маршруту інтеграції та 1-way / 2-way.</li>
             <li>Для пікерів — облікові записи, Sunmi, Provider App.</li>
             <li>Спільна перевірка замовлення на пілоті.</li>
             <li>Супровід під час масштабування та в перші дні після старту.</li>
@@ -990,8 +1100,8 @@
       <div class="callout">Наступний крок — коротка зустріч, щоб обрати варіант і зафіксувати пілотний магазин та орієнтовні дати.</div>
 
       <div class="footer">
-        <span>Bolt Food · <span class="partner-value">Еко-Маркет</span></span>
-        <span class="page" data-page="8"></span>
+        <span>Bolt Food · <span class="partner-value">Назва партнера</span></span>
+        <span class="page" data-page="9"></span>
       </div>
     </section>
   </main>
@@ -1012,11 +1122,8 @@
       const name = cleanPartnerName(input.value);
       partnerValues.forEach((el) => { el.textContent = name; });
       document.title = `Bolt Food — варіанти інтеграції — ${name}`;
-      localStorage.setItem('bolt-food-partner-name', input.value);
     }
 
-    const savedName = localStorage.getItem('bolt-food-partner-name');
-    if (savedName) input.value = savedName;
     updatePartnerName();
 
     input.addEventListener('input', updatePartnerName);
