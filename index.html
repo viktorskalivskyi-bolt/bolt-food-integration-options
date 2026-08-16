@@ -117,7 +117,7 @@
       display: flex;
       gap: 10px;
       align-items: center;
-      width: min(740px, calc(100vw - 28px));
+      width: min(980px, calc(100vw - 28px));
       padding: 10px;
       transform: translateX(-50%);
       border: 1px solid var(--line);
@@ -135,7 +135,8 @@
       font-weight: 700;
     }
 
-    .partner-input {
+    .partner-input,
+    .email-input {
       min-width: 0;
       flex: 1;
       height: 42px;
@@ -148,12 +149,21 @@
       font-weight: 600;
     }
 
-    .partner-input:focus {
+    .email-input { flex: 1.15; }
+
+    .partner-input:focus,
+    .email-input:focus {
       border-color: var(--green);
       box-shadow: 0 0 0 3px rgba(31,174,107,.14);
     }
 
-    .pdf-button {
+    .email-input.is-invalid {
+      border-color: #d14343;
+      box-shadow: 0 0 0 3px rgba(209, 67, 67, .14);
+    }
+
+    .pdf-button,
+    .send-button {
       height: 42px;
       padding: 0 18px;
       color: var(--btn-fg);
@@ -162,9 +172,30 @@
       background: var(--btn-bg);
       cursor: pointer;
       font-weight: 700;
+      white-space: nowrap;
     }
 
-    .pdf-button:hover { background: var(--btn-bg-hover); }
+    .pdf-button:hover,
+    .send-button:hover { background: var(--btn-bg-hover); }
+
+    .send-button {
+      color: var(--ink);
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .send-button:hover {
+      border-color: var(--green);
+      background: var(--mint-soft);
+    }
+
+    :root[data-theme="dark"] .send-button {
+      color: var(--btn-fg);
+      border: 0;
+      background: var(--btn-bg);
+    }
+
+    :root[data-theme="dark"] .send-button:hover { background: var(--btn-bg-hover); }
 
     .theme-button {
       display: grid;
@@ -839,8 +870,15 @@
 
     /* ── Phones & small tablets: reflow instead of scaling ── */
     @media screen and (max-width: 920px) {
+      .toolbar {
+        flex-wrap: wrap;
+        width: min(980px, calc(100vw - 20px));
+      }
       .toolbar-label { display: none; }
-      .pdf-button { padding: 0 14px; font-size: 14px; }
+      .partner-input,
+      .email-input { flex: 1 1 calc(50% - 30px); min-width: 140px; }
+      .pdf-button,
+      .send-button { padding: 0 14px; font-size: 14px; }
 
       .deck {
         display: block;
@@ -925,8 +963,10 @@
 
     @media screen and (max-width: 420px) {
       .toolbar { gap: 7px; padding: 8px; }
-      .pdf-button { padding: 0 11px; font-size: 13px; }
-      .partner-input { min-width: 0; }
+      .partner-input,
+      .email-input { flex: 1 1 100%; }
+      .pdf-button,
+      .send-button { flex: 1; padding: 0 11px; font-size: 13px; }
       .picker-board { grid-template-columns: 1fr; }
       h1, .title-slide h1 { font-size: 28px; }
       h2 { font-size: 22px; }
@@ -1004,6 +1044,17 @@
       autocomplete="organization"
       aria-label="Назва партнера"
     >
+    <label class="toolbar-label" for="sendEmail">Email</label>
+    <input
+      class="email-input"
+      id="sendEmail"
+      type="email"
+      inputmode="email"
+      placeholder="email@partner.com"
+      maxlength="120"
+      autocomplete="email"
+      aria-label="Email для надсилання PDF"
+    >
     <button class="theme-button" id="themeToggle" type="button" title="Світла / темна тема" aria-label="Перемкнути тему">
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8z"/>
@@ -1014,6 +1065,7 @@
       </svg>
     </button>
     <button class="pdf-button" id="downloadPdf" type="button">Завантажити PDF</button>
+    <button class="send-button" id="sendPdf" type="button">Надіслати PDF</button>
   </div>
 
   <main class="deck">
@@ -1446,7 +1498,7 @@
     </section>
   </main>
 
-  <div class="toast" id="toast" role="status" aria-live="polite" style="position:fixed;z-index:100;right:20px;bottom:20px;max-width:360px;padding:14px 18px;color:#fff;border-radius:12px;background:var(--ink);opacity:0;pointer-events:none;transform:translateY(10px);transition:.2s ease;font-size:14px;font-weight:700;">У діалозі друку оберіть «Save as PDF» / «Зберегти як PDF».</div>
+  <div class="toast" id="toast" role="status" aria-live="polite" style="position:fixed;z-index:100;right:20px;bottom:20px;max-width:380px;padding:14px 18px;color:#fff;border-radius:12px;background:var(--ink);opacity:0;pointer-events:none;transform:translateY(10px);transition:.2s ease;font-size:14px;font-weight:700;"></div>
 
   <script>
     const themeToggle = document.getElementById('themeToggle');
@@ -1471,9 +1523,17 @@
     });
 
     const input = document.getElementById('partnerName');
+    const emailInput = document.getElementById('sendEmail');
     const partnerValues = document.querySelectorAll('.partner-value');
     const pdfButton = document.getElementById('downloadPdf');
+    const sendButton = document.getElementById('sendPdf');
     const toast = document.getElementById('toast');
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let toastTimer = null;
+    let pendingMailUrl = null;
+
+    const storedEmail = localStorage.getItem('deck-email');
+    if (storedEmail) emailInput.value = storedEmail;
 
     function cleanPartnerName(value) {
       return value.replace(/\s+/g, ' ').trim() || 'Назва партнера';
@@ -1485,20 +1545,84 @@
       document.title = `Bolt Food — варіанти інтеграції — ${name}`;
     }
 
+    function showToast(message, duration = 4200) {
+      toast.textContent = message;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateY(0)';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+      }, duration);
+    }
+
+    function openPdfPrint() {
+      updatePartnerName();
+      showToast('У діалозі друку оберіть «Save as PDF» / «Зберегти як PDF».', 5000);
+      setTimeout(() => { window.print(); }, 250);
+    }
+
+    function buildMailUrl(email, partner) {
+      const subject = `Bolt Food × ${partner}: варіанти інтеграції`;
+      const deckUrl = window.location.href.split('#')[0].split('?')[0];
+      const body = [
+        `Доброго дня!`,
+        ``,
+        `Надсилаю презентацію з варіантами інтеграції ${partner} з Bolt Food.`,
+        ``,
+        `Будь ласка, відкрийте прикріплений PDF.`,
+        `Онлайн-версія: ${deckUrl}`,
+        ``,
+        `Документація API: https://developer.bolt.eu/`,
+      ].join('\n');
+
+      return `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    function openOutgoingMail(email) {
+      const partner = cleanPartnerName(input.value);
+      const mailUrl = buildMailUrl(email, partner);
+      const opened = window.open(mailUrl, '_blank');
+      if (!opened) window.location.href = mailUrl;
+    }
+
     updatePartnerName();
 
     input.addEventListener('input', updatePartnerName);
     input.addEventListener('change', updatePartnerName);
 
+    emailInput.addEventListener('input', () => {
+      emailInput.classList.remove('is-invalid');
+      localStorage.setItem('deck-email', emailInput.value.trim());
+    });
+
     pdfButton.addEventListener('click', () => {
-      updatePartnerName();
-      toast.style.opacity = '1';
-      toast.style.transform = 'translateY(0)';
-      setTimeout(() => {
-        window.print();
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateY(10px)';
-      }, 250);
+      pendingMailUrl = null;
+      openPdfPrint();
+    });
+
+    sendButton.addEventListener('click', () => {
+      const email = emailInput.value.trim();
+      if (!emailPattern.test(email)) {
+        emailInput.classList.add('is-invalid');
+        emailInput.focus();
+        showToast('Вкажіть коректний email, куди надіслати PDF.');
+        return;
+      }
+
+      emailInput.classList.remove('is-invalid');
+      localStorage.setItem('deck-email', email);
+      pendingMailUrl = email;
+      showToast('Збережіть PDF, після цього відкриється лист — прикріпіть файл.', 6500);
+      setTimeout(() => { window.print(); }, 250);
+    });
+
+    window.addEventListener('afterprint', () => {
+      if (!pendingMailUrl) return;
+      const email = pendingMailUrl;
+      pendingMailUrl = null;
+      openOutgoingMail(email);
+      showToast(`Лист відкрито на ${email}. Прикріпіть збережений PDF.`, 5000);
     });
   </script>
 </body>
