@@ -23,21 +23,84 @@
       --blue-deep: #1250c8;
       --blue-vivid: #2a8bee;
       --paper: #ffffff;
+      --surface: #ffffff;
+      --surface-blue: #f2f8fc;
+      --frame: #13211b;
+      --btn-bg: #13211b;
+      --btn-bg-hover: #0b1611;
+      --btn-fg: #ffffff;
+      --page-bg: #eceeec;
+      --body-text: #45514b;
+      --toolbar-bg: rgba(255, 255, 255, .95);
+      --callout-text: #2f5f45;
+      --warm-bg: #fdf7ea;
+      --warm-border: #f0dcae;
+      --warm-text: #6d4d1e;
+      --note-blue-bg: linear-gradient(120deg, #eaf2fe, #f6faff);
+      --note-blue-text: #1250c8;
+      --tint-a: #fbfdfb;
+      --tint-b: #f7fbff;
+      --cap-blue: #6b8fc4;
+      --flow-blue-bg: #eaf3fa;
+      --flow-blue-border: #cfe4f2;
+      --flow-blue-text: #1f5e8a;
+      --soft-span: #6f9c85;
+      --mint-fade: #f6fcf8;
+      --slide-shadow: 0 16px 50px rgba(19, 33, 27, .12);
       --slide-w: 1280px;
       --slide-h: 720px;
+    }
+
+    :root[data-theme="dark"] {
+      --ink: #e9f1ec;
+      --green-strong: #37d585;
+      --green-bright: #2ed37c;
+      --muted: #a6b5ae;
+      --faint: #86968f;
+      --line: #2a3531;
+      --mint: rgba(45, 205, 122, .16);
+      --mint-soft: rgba(45, 205, 122, .08);
+      --mint-line: rgba(45, 205, 122, .3);
+      --blue: #6ab0e8;
+      --blue-deep: #2f7ef0;
+      --blue-vivid: #63acff;
+      --paper: #151d1a;
+      --surface: #1b2421;
+      --surface-blue: #172231;
+      --btn-bg: #2ed37c;
+      --btn-bg-hover: #25bb6d;
+      --btn-fg: #0b120e;
+      --page-bg: #0b100e;
+      --body-text: #bccac3;
+      --toolbar-bg: rgba(27, 36, 33, .95);
+      --callout-text: #8fe0b4;
+      --warm-bg: #241f14;
+      --warm-border: #4b3f22;
+      --warm-text: #e6cd92;
+      --note-blue-bg: linear-gradient(120deg, #182640, #141c28);
+      --note-blue-text: #8dbcff;
+      --tint-a: #1a2521;
+      --tint-b: #172231;
+      --cap-blue: #7ba6dd;
+      --flow-blue-bg: #172231;
+      --flow-blue-border: #2c3f52;
+      --flow-blue-text: #7fb6ea;
+      --soft-span: #8fbfa6;
+      --mint-fade: rgba(45, 205, 122, .04);
+      --slide-shadow: 0 16px 50px rgba(0, 0, 0, .34);
     }
 
     * { box-sizing: border-box; }
 
     html {
       scroll-behavior: smooth;
-      background: #eceeec;
+      background: var(--page-bg);
     }
 
     body {
       margin: 0;
       color: var(--ink);
-      background: #eceeec;
+      background: var(--page-bg);
       font-family: "Avenir Next", "Avenir", -apple-system, BlinkMacSystemFont, "Segoe UI", "Mulish", "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
@@ -59,7 +122,7 @@
       transform: translateX(-50%);
       border: 1px solid var(--line);
       border-radius: 14px;
-      background: rgba(255,255,255,.95);
+      background: var(--toolbar-bg);
       backdrop-filter: blur(14px);
       box-shadow: 0 8px 30px rgba(19,33,27,.08);
     }
@@ -81,7 +144,7 @@
       border: 1px solid var(--line);
       border-radius: 10px;
       outline: none;
-      background: #fff;
+      background: var(--surface);
       font-weight: 600;
     }
 
@@ -93,15 +156,35 @@
     .pdf-button {
       height: 42px;
       padding: 0 18px;
-      color: #fff;
+      color: var(--btn-fg);
       border: 0;
       border-radius: 10px;
-      background: var(--ink);
+      background: var(--btn-bg);
       cursor: pointer;
       font-weight: 700;
     }
 
-    .pdf-button:hover { background: #0b1611; }
+    .pdf-button:hover { background: var(--btn-bg-hover); }
+
+    .theme-button {
+      display: grid;
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      padding: 0;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      cursor: pointer;
+    }
+
+    .theme-button:hover { border-color: var(--green); }
+    .theme-button svg { width: 19px; height: 19px; }
+    .theme-button .icon-sun { display: none; }
+    :root[data-theme="dark"] .theme-button .icon-sun { display: block; }
+    :root[data-theme="dark"] .theme-button .icon-moon { display: none; }
 
     /* ── Deck ── */
     .deck {
@@ -118,7 +201,7 @@
       overflow: hidden;
       padding: 56px 72px 70px;
       background: var(--paper);
-      box-shadow: 0 16px 50px rgba(19,33,27,.12);
+      box-shadow: var(--slide-shadow);
     }
 
     /* left-edge signature gradient bar */
@@ -274,7 +357,7 @@
       position: relative;
       margin: 11px 0;
       padding-left: 20px;
-      color: #45514b;
+      color: var(--body-text);
       font-size: 16px;
       line-height: 1.4;
     }
@@ -307,7 +390,7 @@
       padding: 28px 30px;
       border: 1px solid var(--line);
       border-radius: 16px;
-      background: #fff;
+      background: var(--surface);
     }
 
     .card .cap {
@@ -332,7 +415,7 @@
       background: var(--mint-soft);
     }
 
-    .principle-card.blue { background: #f2f8fc; }
+    .principle-card.blue { background: var(--surface-blue); }
 
     .principle-card p {
       margin-bottom: 0;
@@ -366,7 +449,7 @@
       text-align: center;
       border: 1px solid var(--line);
       border-radius: 14px;
-      background: #fff;
+      background: var(--surface);
       font-size: 15px;
       font-weight: 700;
       line-height: 1.35;
@@ -379,9 +462,9 @@
     }
 
     .flow-node.secondary {
-      color: #1f5e8a;
-      border-color: #cfe4f2;
-      background: #eaf3fa;
+      color: var(--flow-blue-text);
+      border-color: var(--flow-blue-border);
+      background: var(--flow-blue-bg);
     }
 
     .flow-node .small { display: block; margin-top: 4px; font-weight: 500; }
@@ -403,16 +486,16 @@
       border: 1px solid var(--mint-line);
       border-radius: 12px;
       background: var(--mint-soft);
-      color: #2f5f45;
+      color: var(--callout-text);
       font-size: 16px;
       line-height: 1.45;
       text-align: center;
     }
 
     .callout.warm {
-      border-color: #f0dcae;
-      background: #fdf7ea;
-      color: #6d4d1e;
+      border-color: var(--warm-border);
+      background: var(--warm-bg);
+      color: var(--warm-text);
       text-align: left;
     }
 
@@ -449,7 +532,7 @@
 
     th:first-child, td:first-child { width: 26%; }
     td:first-child { color: var(--ink); font-weight: 700; }
-    td { color: #4a554f; }
+    td { color: var(--body-text); }
     tbody tr:last-child td { border-bottom: 0; }
 
     /* ── Steps ── */
@@ -481,7 +564,7 @@
       padding: 16px 20px;
       border: 1px solid var(--line);
       border-radius: 14px;
-      background: #fff;
+      background: var(--surface);
     }
 
     .step-num {
@@ -547,7 +630,7 @@
       position: relative;
       padding: 6px;
       border-radius: 20px;
-      background: var(--ink);
+      background: var(--frame);
       box-shadow: 0 10px 26px rgba(19, 33, 27, .16);
     }
 
@@ -592,7 +675,7 @@
       padding: 22px 24px 18px;
       border: 1px solid var(--line);
       border-radius: 20px;
-      background: linear-gradient(170deg, #fbfdfb 0%, #fff 46%);
+      background: linear-gradient(170deg, var(--tint-a) 0%, var(--surface) 46%);
       box-shadow: 0 10px 28px rgba(19, 33, 27, .06);
     }
 
@@ -607,7 +690,7 @@
     }
 
     .route-card.b {
-      background: linear-gradient(170deg, #f7fbff 0%, #fff 46%);
+      background: linear-gradient(170deg, var(--tint-b) 0%, var(--surface) 46%);
     }
 
     .route-card.b::before {
@@ -634,7 +717,7 @@
       text-align: center;
       border: 1px solid var(--line);
       border-radius: 14px;
-      background: #fff;
+      background: var(--surface);
       color: var(--ink);
       font-size: 13px;
       font-weight: 800;
@@ -662,10 +745,10 @@
     .route-node.bolt-soft {
       color: var(--green-strong);
       border-color: var(--mint-line);
-      background: linear-gradient(140deg, var(--mint), #f6fcf8);
+      background: linear-gradient(140deg, var(--mint), var(--mint-fade));
     }
 
-    .route-node.bolt-soft span { color: #6f9c85; }
+    .route-node.bolt-soft span { color: var(--soft-span); }
 
     .route-node.corezoid {
       color: #fff;
@@ -692,7 +775,7 @@
       text-align: center;
     }
 
-    .route-card.b .route-cap { color: #6b8fc4; }
+    .route-card.b .route-cap { color: var(--cap-blue); }
 
     .route-card ul.bullets li { margin: 6px 0; font-size: 14px; }
 
@@ -722,14 +805,14 @@
       padding: 8px 10px;
       border-radius: 10px;
       background: var(--mint-soft);
-      color: #2f5f45;
+      color: var(--callout-text);
       font-size: 12px;
       line-height: 1.35;
     }
 
     .comm-note.blue {
-      background: linear-gradient(120deg, #eaf2fe, #f6faff);
-      color: var(--blue-deep);
+      background: var(--note-blue-bg);
+      color: var(--note-blue-text);
     }
 
     .title-meta {
@@ -744,7 +827,7 @@
 
     .title-meta .api-link { font-size: 16px; }
 
-    @media (max-width: 1320px) {
+    @media screen and (min-width: 921px) and (max-width: 1320px) {
       .deck { display: flex; flex-direction: column; align-items: center; }
       .slide {
         flex: 0 0 auto;
@@ -754,16 +837,142 @@
       }
     }
 
-    @media (max-width: 700px) {
+    /* ── Phones & small tablets: reflow instead of scaling ── */
+    @media screen and (max-width: 920px) {
       .toolbar-label { display: none; }
-      .pdf-button { padding: 0 12px; font-size: 13px; }
-      .deck { padding-top: 82px; }
+      .pdf-button { padding: 0 14px; font-size: 14px; }
+
+      .deck {
+        display: block;
+        padding: 78px 12px 32px;
+      }
+
+      .slide {
+        width: 100%;
+        height: auto;
+        margin: 0 0 14px;
+        padding: 30px 20px 24px;
+        border-radius: 16px;
+        transform: none !important;
+      }
+
+      .slide::before {
+        top: 0;
+        right: 0;
+        left: 0;
+        width: auto;
+        height: 5px;
+        transform: none;
+        border-radius: 0;
+        background: linear-gradient(90deg, var(--green-strong), var(--lime));
+      }
+
+      .footer,
+      .callout {
+        position: static;
+        right: auto;
+        bottom: auto;
+        left: auto;
+      }
+
+      .callout { margin-top: 16px; padding: 14px 16px; font-size: 14px; text-align: left; }
+      .footer { margin-top: 18px; }
+
+      h1, .title-slide h1 { margin-top: 10px; font-size: 32px; }
+      h2 { font-size: 25px; }
+      h3 { font-size: 18px; }
+      .lead { font-size: 16px; }
+      .subtitle { font-size: 15px; }
+      .slide-head { margin-bottom: 20px; }
+      .title-slide { padding-top: 30px; }
+      .title-meta { margin-top: 18px; font-size: 15px; }
+
+      .cards-2,
+      .rules,
+      .route-grid,
+      .principle,
+      .flow {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-top: 16px;
+      }
+
+      .card, .principle-card, .rule-card { padding: 20px; }
+      .versus, .arrow { padding: 2px 0; font-size: 22px; }
+      .rule-big { font-size: 28px; }
+
+      .picker-board { grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 6px; }
+      .device img { width: 100%; height: auto; }
+      .shot h3 { font-size: 15px; }
+      .shot p { font-size: 12px; }
+
+      table { font-size: 12px; }
+      th, td { padding: 9px 10px; }
+      th:first-child, td:first-child { width: 30%; }
+
+      .route-diagram,
+      .route-diagram.corezoid {
+        grid-template-columns: 1fr;
+        gap: 2px;
+        margin: 14px 0 10px;
+      }
+
+      .connector { height: 34px; padding: 0; }
+      .connector svg { width: 34px; margin: 0 auto; transform: rotate(90deg); }
+      .route-card { padding: 20px; }
+      .route-card ul.bullets li { font-size: 14px; }
+    }
+
+    @media screen and (max-width: 420px) {
+      .toolbar { gap: 7px; padding: 8px; }
+      .pdf-button { padding: 0 11px; font-size: 13px; }
+      .partner-input { min-width: 0; }
+      .picker-board { grid-template-columns: 1fr; }
+      h1, .title-slide h1 { font-size: 28px; }
+      h2 { font-size: 22px; }
+      table { font-size: 11px; }
+      th, td { padding: 7px 8px; }
     }
 
     /* ── Print / PDF ── */
     @page { size: 13.333in 7.5in; margin: 0; }
 
     @media print {
+      /* PDF always exports in the light theme */
+      :root, :root[data-theme="dark"] {
+        --ink: #13211b;
+        --green-strong: #0f9d5a;
+        --green-bright: #21c56d;
+        --muted: #6c7772;
+        --faint: #97a49d;
+        --line: #e6ebe7;
+        --mint: #e9f7ef;
+        --mint-soft: #f3faf5;
+        --mint-line: #d3ecdc;
+        --blue: #2f7db0;
+        --blue-deep: #1250c8;
+        --blue-vivid: #2a8bee;
+        --paper: #ffffff;
+        --surface: #ffffff;
+        --surface-blue: #f2f8fc;
+        --body-text: #45514b;
+        --callout-text: #2f5f45;
+        --warm-bg: #fdf7ea;
+        --warm-border: #f0dcae;
+        --warm-text: #6d4d1e;
+        --note-blue-bg: linear-gradient(120deg, #eaf2fe, #f6faff);
+        --note-blue-text: #1250c8;
+        --tint-a: #fbfdfb;
+        --tint-b: #f7fbff;
+        --cap-blue: #6b8fc4;
+        --flow-blue-bg: #eaf3fa;
+        --flow-blue-border: #cfe4f2;
+        --flow-blue-text: #1f5e8a;
+        --soft-span: #6f9c85;
+        --mint-fade: #f6fcf8;
+        --slide-shadow: none;
+      }
+
       html, body { width: 13.333in; margin: 0; background: #fff; }
       .toolbar, .toast { display: none !important; }
       .deck { display: block; padding: 0; }
@@ -795,6 +1004,15 @@
       autocomplete="organization"
       aria-label="Назва партнера"
     >
+    <button class="theme-button" id="themeToggle" type="button" title="Світла / темна тема" aria-label="Перемкнути тему">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8z"/>
+      </svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.2"/>
+        <path d="M12 2.4v2.2M12 19.4v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.4 12h2.2M19.4 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>
+      </svg>
+    </button>
     <button class="pdf-button" id="downloadPdf" type="button">Завантажити PDF</button>
   </div>
 
@@ -1231,6 +1449,27 @@
   <div class="toast" id="toast" role="status" aria-live="polite" style="position:fixed;z-index:100;right:20px;bottom:20px;max-width:360px;padding:14px 18px;color:#fff;border-radius:12px;background:var(--ink);opacity:0;pointer-events:none;transform:translateY(10px);transition:.2s ease;font-size:14px;font-weight:700;">У діалозі друку оберіть «Save as PDF» / «Зберегти як PDF».</div>
 
   <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const storedTheme = localStorage.getItem('deck-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.querySelector('meta[name="color-scheme"]').setAttribute('content', theme === 'dark' ? 'dark light' : 'light');
+    }
+
+    applyTheme(storedTheme || (prefersDark.matches ? 'dark' : 'light'));
+
+    prefersDark.addEventListener('change', (event) => {
+      if (!localStorage.getItem('deck-theme')) applyTheme(event.matches ? 'dark' : 'light');
+    });
+
+    themeToggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      localStorage.setItem('deck-theme', next);
+    });
+
     const input = document.getElementById('partnerName');
     const partnerValues = document.querySelectorAll('.partner-value');
     const pdfButton = document.getElementById('downloadPdf');
