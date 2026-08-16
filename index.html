@@ -525,114 +525,50 @@
 
     .stack { display: grid; gap: 14px; align-content: start; }
 
-    /* ── Picker device mockup ── */
-    .picker-wrap {
+    /* ── Picker storyboard (real app screens) ── */
+    .picker-board {
       display: grid;
-      grid-template-columns: 336px 1fr;
-      gap: 44px;
-      align-items: center;
-      margin-top: 24px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+      justify-items: center;
+      margin-top: 2px;
     }
 
-    .device-stage {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      align-items: center;
-      justify-content: center;
-    }
+    .shot { display: grid; gap: 10px; align-content: start; justify-items: center; }
 
     .device {
-      width: 274px;
-      height: 410px;
-      padding: 14px;
-      border-radius: 30px;
-      background: var(--ink);
-    }
-
-    .device-screen {
-      display: flex;
-      height: 100%;
-      flex-direction: column;
-      gap: 12px;
-      padding: 16px;
+      position: relative;
+      padding: 6px;
       border-radius: 20px;
-      background: #fff;
+      background: var(--ink);
+      box-shadow: 0 10px 26px rgba(19, 33, 27, .16);
     }
 
-    .scr-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--ink);
-      font-size: 13px;
+    .device img {
+      display: block;
+      width: auto;
+      height: 374px;
+      border-radius: 15px;
+    }
+
+    .shot-num {
+      position: absolute;
+      top: -11px;
+      left: -11px;
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border: 2px solid var(--paper);
+      border-radius: 50%;
+      background: var(--green-strong);
+      color: #fff;
+      font-size: 14px;
       font-weight: 800;
     }
 
-    .scr-badge {
-      padding: 2px 9px;
-      border-radius: 999px;
-      background: var(--mint);
-      color: var(--green-strong);
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    .scr-item {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-    }
-
-    .scr-thumb {
-      flex: 0 0 auto;
-      width: 46px;
-      height: 46px;
-      border-radius: 9px;
-      background: linear-gradient(135deg, #d7ede1, #eef7f1);
-    }
-
-    .scr-name { font-size: 14px; font-weight: 800; color: var(--ink); }
-    .scr-qty { margin-top: 2px; font-size: 12px; color: var(--muted); }
-
-    .scr-scan {
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-      border: 1.5px dashed #b9d3c5;
-      border-radius: 12px;
-      background: var(--mint-soft);
-    }
-
-    .scr-barcode {
-      width: 150px;
-      height: 54px;
-      border-radius: 4px;
-      background: repeating-linear-gradient(90deg, var(--ink) 0 2px, #fff 2px 5px, var(--ink) 5px 8px, #fff 8px 11px);
-    }
-
-    .scr-scanhint { color: var(--muted); font-size: 11px; }
-
-    .scr-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-    .scr-btn {
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 800;
-      text-align: center;
-    }
-
-    .scr-btn.primary { background: var(--green-bright); color: #fff; }
-    .scr-btn.ghost { border: 1px solid var(--line); color: var(--ink); }
-
-    .device-cap { color: var(--faint); font-size: 13px; font-weight: 700; }
+    .shot h3 { margin: 0; font-size: 16px; text-align: center; }
+    .shot p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.35; text-align: center; }
 
     /* ── Integration routes ── */
     .route-grid {
@@ -880,39 +816,52 @@
       <div class="slide-head">
         <p class="eyebrow"><span class="dot"></span>Як працює Bolt Picker</p>
         <h2>Збірка замовлення в кілька кроків</h2>
-        <p class="subtitle">Стосується Варіанта 1. Працівник збирає замовлення у застосунку на пристрої Sunmi.</p>
+        <p class="subtitle">Стосується Варіанта 1. Реальні екрани Bolt Picker на пристрої Sunmi L2s.</p>
       </div>
 
-      <div class="picker-wrap">
-        <div class="device-stage">
+      <div class="picker-board">
+        <div class="shot">
           <div class="device">
-            <div class="device-screen">
-              <div class="scr-top"><span>Замовлення&nbsp;#4821</span><span class="scr-badge">3 / 8</span></div>
-              <div class="scr-item">
-                <span class="scr-thumb"></span>
-                <div>
-                  <div class="scr-name">Молоко 2.5%, 1 л</div>
-                  <div class="scr-qty">Потрібно: 2 шт</div>
-                </div>
-              </div>
-              <div class="scr-scan">
-                <span class="scr-barcode"></span>
-                <span class="scr-scanhint">Наведіть сканер на штрихкод</span>
-              </div>
-              <div class="scr-actions">
-                <span class="scr-btn primary">Зібрано</span>
-                <span class="scr-btn ghost">Замінити</span>
-              </div>
-            </div>
+            <span class="shot-num">1</span>
+            <img src="assets/picker-1-accept.png" alt="Екран прийняття замовлення в Bolt Picker">
           </div>
-          <div class="device-cap">Bolt Picker · Sunmi L2s</div>
+          <div>
+            <h3>Прийняти замовлення</h3>
+            <p>Список позицій · автоприйняття</p>
+          </div>
         </div>
 
-        <div class="steps-col">
-          <div class="step"><span class="step-num">1</span><div><h3>Замовлення у Picker</h3><p>Позиції згруповані для швидкого маршруту по залу.</p></div></div>
-          <div class="step"><span class="step-num">2</span><div><h3>Скан товару</h3><p>Штрихкод підтверджує товар і фактичну кількість.</p></div></div>
-          <div class="step"><span class="step-num">3</span><div><h3>Заміна або відсутність</h3><p>Альтернатива не дорожча; різницю повертають покупцеві.</p></div></div>
-          <div class="step"><span class="step-num">4</span><div><h3>Готово до видачі</h3><p>Замовлення позначається зібраним і передається курʼєру.</p></div></div>
+        <div class="shot">
+          <div class="device">
+            <span class="shot-num">2</span>
+            <img src="assets/picker-2-pick.png" alt="Екран збору товарів зі скануванням штрихкодів">
+          </div>
+          <div>
+            <h3>Зібрати й просканувати</h3>
+            <p>Штрихкод · вагові через «Add weight»</p>
+          </div>
+        </div>
+
+        <div class="shot">
+          <div class="device">
+            <span class="shot-num">3</span>
+            <img src="assets/picker-3-replace.png" alt="Екран заміни товару в Bolt Picker">
+          </div>
+          <div>
+            <h3>Заміна або відсутність</h3>
+            <p>Альтернатива не дорожча за оригінал</p>
+          </div>
+        </div>
+
+        <div class="shot">
+          <div class="device">
+            <span class="shot-num">4</span>
+            <img src="assets/picker-4-confirm.png" alt="Екран підтвердження зібраного замовлення">
+          </div>
+          <div>
+            <h3>Підтвердити збір</h3>
+            <p>Замовлення готове · передача курʼєру</p>
+          </div>
         </div>
       </div>
 
